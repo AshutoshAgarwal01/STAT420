@@ -1,0 +1,57 @@
+---
+title: "Final Project Proposal"
+author: "STAT 420, Summer 2021, Ashutosh Agarwal, Chandan Goel"
+date: '07/20/2021'
+output:
+  html_document: 
+    theme: readable
+    toc: yes
+  pdf_document: default
+urlcolor: cyan
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Team
+
+  - **Ashutosh Agarwal (aa61)**
+  - **Chandan Goel (chandan3)**
+
+## Project Title
+
+**House Price Prediction in King County, WA**
+
+## Background information of data set
+
+TBD by Chandan
+
+## Brief statement
+
+TBD by Chandan
+
+## Data file description
+
+  * **Source:** This data set is taken from [Kaggle](https://www.kaggle.com/harlfoxem/housesalesprediction).
+  
+  * **Brief description:** This data set contains house prices for King County, WA that were sold between `May 2014` and `May 2015`
+  
+  * **Loading data file**
+  
+```{r}
+data = read.csv("kc_house_data.csv")
+head(data)
+```
+  
+  - **Summary of data**
+  
+  This data set contains **`r nrow(data)` observations**. Each observation has **`r ncol(data)` variables**.
+  
+  Following are some variables that we think are of great importance and we will most likely include in our model.
+  
+```{r}
+metadata = read.csv("Metadata.csv")
+# rownames(metadata) = NULL
+knitr::kable(metadata[metadata$IsImportant == "Yes", -5], row.names = FALSE)
+```

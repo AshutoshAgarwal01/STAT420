@@ -1,0 +1,209 @@
+---
+title: "Quiz10"
+author: "Ashutosh Agarwal"
+date: "7/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+```{r}
+b0 = -3
+b1 = 1
+b2 = 2
+b3 = 3
+
+x1 = -1
+x2 = 0.5
+x3 = 0.25
+
+eta = b0 + b1 * x1 + b2 * x2 + b3 * x3
+p1 = 1 / (1 + exp(-1 * eta))
+
+p0 = 1 - p1
+p0
+
+# Another approach
+# p1 = boot::inv.logit(eta)
+# 1 - p1
+```
+
+## Question 2
+
+```{r}
+model_mtcars = glm(am ~ mpg + hp + qsec, data = mtcars, family = binomial)
+model_mtcars$coefficients["qsec"]
+```
+## Question 3
+
+```{r}
+model_mtcars = glm(am ~ mpg + hp + qsec, data = mtcars, family = binomial)
+model_mtcars$coefficients["mpg"]
+```
+
+## Question 4
+
+```{r}
+predict(model_mtcars, newdata = data.frame(mpg = 19, hp = 150, qsec = 19))
+```
+
+## Question 5
+
+```{r}
+logodds = predict(model_mtcars, newdata = data.frame(mpg = 22, hp = 123, qsec = 18))
+boot::inv.logit(logodds)
+# Another way - remember that by default type is 'link' which returns value of eta function a.k.a. logodds in this case.
+# predict(model_mtcars, newdata = data.frame(mpg = 22, hp = 123, qsec = 18), type = "response")
+```
+
+## Question 6
+
+```{r}
+null_model_mtcars = glm(am ~ 1, data = mtcars, family = binomial)
+an = anova(null_model_mtcars, model_mtcars, test = 'LRT')
+an
+an$Deviance[2]
+```
+
+## Question 7
+
+Wald test - to test significance of coefficient (test statistic z score)
+LRT - Can be used for both significance of coefficient or model (model ~ Chi-square)
+
+```{r}
+model_mtcars = glm(am ~ mpg + hp + qsec, data = mtcars, family = binomial)
+
+# from summary
+summary(model_mtcars)$coefficients["hp", "Pr(>|z|)"]
+
+# Manually
+b2_hat = summary(model_mtcars)$coefficients["hp", "Estimate"]
+b2_se = summary(model_mtcars)$coefficients["hp", "Std. Error"]
+
+z = (b2_hat - 0) / b2_se
+
+# Find p-value
+2 * pnorm(abs(z), mean = 0, sd = 1, lower.tail = FALSE)
+```
+
+## Question 8
+
+```{r}
+library(MASS)
+
+model_pima_tr = glm(type ~ glu + ped + I(glu^2) + I(ped^2) + glu : ped, data = Pima.tr, family = binomial)
+coef(model_pima_tr)[5]
+```
+
+## Question 9
+
+```{r}
+library(MASS)
+model_pima_tr = glm(type ~ glu + ped + I(glu^2) + I(ped^2) + glu : ped, data = Pima.tr, family = binomial)
+
+mean(predict(model_pima_tr, newdata = Pima.te, type = "response") > 0.8)
+```
+
+## Question 10
+
+```{r}
+library(MASS)
+
+model_pima_add_start = glm(type ~ ., data = Pima.tr, family = binomial)
+
+reduced_model = step(model_pima_add_start, direction = "backward", k = 2, trace = 0)
+length(coef(reduced_model)) - 1
+```
+
+## Question 11 - Check this
+
+  - Attempt1: 256.41 - Incorrect
+  
+  - Attempt2: 162.6924 (used deviance(reduced_model))
+  
+```{r}
+model_pima_add_int_start = glm(type ~ . ^ 2, data = Pima.tr, family = binomial)
+
+reduced_model = step(model_pima_add_int_start, direction = "backward", k = 2, trace = 0)
+deviance(reduced_model)
+# summary(reduced_model)
+```
+
+## Question 12
+
+  - Attempt1: 0.1597213
+
+```{r}
+library(MASS)
+library(boot)
+
+# fit the models here
+
+set.seed(42)
+# get cross-validated results for the polynomial model here
+model_8 = glm(type ~ glu + ped + I(glu^2) + I(ped^2) + glu : ped, data = Pima.tr, family = binomial)
+cv.glm(Pima.tr, model_8, K = 5)$delta[1]
+
+set.seed(42)
+# get cross-validated results for the additive model here
+model_10_start = glm(type ~ ., data = Pima.tr, family = binomial)
+cv.glm(Pima.tr, model_10_start, K = 5)$delta[1]
+
+set.seed(42)
+# get cross-validated results for the model selected from additive model here
+model10 = step(model_10_start, direction = "backward", k = 2, trace = 0)
+cv.glm(Pima.tr, model10, K = 5)$delta[1]
+
+set.seed(42)
+# get cross-validated results for the interaction model here
+model_11_start = glm(type ~ . ^ 2, data = Pima.tr, family = binomial)
+cv.glm(Pima.tr, model_11_start, K = 5)$delta[1]
+
+set.seed(42)
+# get cross-validated results for the model selected from interaction model here
+model_11 = step(model_11_start, direction = "backward", k = 2, trace = 0)
+cv.glm(Pima.tr, model_11, K = 5)$delta[1]
+```
+
+## Question 13
+
+  - In this code, we have not used type = "Response". It would have given probability.
+  
+  - We have two options, either use type = "response " and compare like > 0.5
+  
+  - Or do not use "response" (it gives log odds)  and compare like > 0
+
+```{r}
+model_add = glm(type ~ ., data = Pima.tr, family = binomial)
+mean(ifelse(predict(model_add, newdata = Pima.te) > 0, "Yes", "No") != Pima.te$type)
+```
+
+## Question 14
+
+  - Sensitivity = True positive rate. i.e. TP / Total actual positives in other words TP / (TP + FN)
+
+```{r}
+model_add = glm(type ~ ., data = Pima.tr, family = binomial)
+cm = table(ifelse(predict(model_add, newdata = Pima.te) > 0, "Yes", "No"), Pima.te$type)
+sensitivity = cm[2,2] / sum(cm[, 2])
+sensitivity
+```
+
+## Question 15
+
+  - In this question we are using type = response because we need to compare prediction with a real probability.
+  
+  - Attempt1: 0.7981651
+
+```{r}
+model_add = glm(type ~ ., data = Pima.tr, family = binomial)
+
+cm = table(ifelse(predict(model_add, newdata = Pima.te, type = "response") > 0.3, "Yes", "No"), Pima.te$type)
+sensitivity = cm[2,2] / sum(cm[, 2])
+sensitivity
+```
+

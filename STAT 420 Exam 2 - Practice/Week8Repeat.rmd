@@ -1,0 +1,146 @@
+---
+title: "Week8Repeat"
+author: "Ashutosh Agarwal"
+date: "8/1/2021"
+output: html_document
+---
+
+## Week 8
+
+# 1
+
+4, 9, 10
+
+More suspect in model with data_2
+```{r}
+model1 = lm(y ~ x, data = data_1)
+model2 = lm(y ~ x, data = data_2)
+par(mfrow = c(1,2))
+qqnorm(resid(model1))
+qqline(resid(model1))
+
+qqnorm(resid(model2))
+qqline(resid(model2))
+```
+
+# 2
+
+
+The equal variance assumption is more suspect for the model fit to data_1.
+```{r}
+model1 = lm(y ~ x, data = data_1)
+model2 = lm(y ~ x, data = data_2)
+# par(mfrow = c(1,2))
+plot(fitted(model1), resid(model1))
+abline(h = 0)
+plot(fitted(model2), resid(model2))
+abline(h = 0)
+```
+
+# 3
+
+```{r}
+# at x = -3
+x = -3
+sd = abs(x)
+mean = 2 + 4 * x
+pnorm(-12, mean = mean, sd = sd, lower.tail = TRUE)
+
+```
+
+# 4
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+mean(abs(rstandard(model)) < 2)
+```
+
+# 5
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+LifeCycleSavings[which.max(abs(rstandard(model))), ]
+```
+
+# 6
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+sum(hatvalues(model) > 2 * mean(hatvalues(model)))
+```
+
+# 7
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+LifeCycleSavings[which.max(hatvalues(model)), ]
+```
+
+# 8
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+max(cooks.distance(model))
+```
+
+# 9
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+newmodel = lm(sr ~ ., data = LifeCycleSavings, subset = cooks.distance(model) <= 4/ nrow(LifeCycleSavings))
+sum(coef(newmodel))
+```
+
+# 10
+
+```{r}
+airquality = na.omit(airquality)
+model = lm(Ozone ~ Temp + I(Temp^2), data = airquality)
+summary(model)$coefficients["I(Temp^2)", "Pr(>|t|)"]
+```
+
+# 11
+
+```{r}
+airquality = na.omit(airquality)
+model = lm(Ozone ~ Temp + I(Temp^2), data = airquality)
+modelBig = lm(Ozone ~ Temp + I(Temp^2)+ I(Temp^3)+ I(Temp^4), data = airquality)
+an = anova(model, modelBig)
+an$`Pr(>F)`[2]
+```
+
+# 12
+
+```{r}
+airquality = na.omit(airquality)
+modelBig = lm(Ozone ~ Temp + I(Temp^2)+ I(Temp^3)+ I(Temp^4), data = airquality)
+ifelse(shapiro.test(resid(modelBig))$p < 0.01, "Not normal", "Normal")
+```
+
+# 13
+
+```{r}
+airquality = na.omit(airquality)
+model = lm(log(Ozone) ~ Temp, data = airquality)
+ifelse(shapiro.test(resid(model))$p < 0.01, "Not normal", "Normal")
+```
+
+# 14
+
+```{r}
+airquality = na.omit(airquality)
+model = lm(log(Ozone) ~ Temp, data = airquality)
+exp(predict(model, newdata = data.frame(Temp = 84), level = 0.9, interval = "prediction"))[3]
+```
+
+# 15
+
+```{r}
+airquality = na.omit(airquality)
+model = lm(log(Ozone) ~ Temp, data = airquality)
+
+f = fitted(model)
+r = resid(model)
+var(r[which(f < 3.5)])/ var(r[which(f > 3.5)])
+```
+

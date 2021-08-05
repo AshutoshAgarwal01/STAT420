@@ -1,0 +1,101 @@
+---
+title: "Practice Quiz 10"
+author: "Ashutosh Agarwal"
+date: "7/23/2021"
+output: html_document
+---
+
+## Question 1
+
+```{r}
+b0 = 2
+b1 = -1
+b2 = -1
+x1 = 1
+x2 = 0
+
+eta = b0 + b1 * x1 + b2 * x2
+1 / (1 + exp(-1 * eta))
+
+# Another approach
+boot::inv.logit(eta)
+```
+
+## Question 2
+
+```{r}
+#quiz_data
+model = glm(y ~ ., data = quiz_data, family = binomial)
+coef(model)[3]
+```
+
+## Question 3
+
+```{r}
+# quiz_data
+model = glm(y ~ ., data = quiz_data, family = binomial)
+b3_hat = coef(model)[4]
+b3_null = 0
+b3_se = summary(model)$coefficients[4, 'Std. Error']
+b3_z = summary(model)$coefficients[4, 'z value']
+
+# Calculate z-value explicityly
+z_calc = (b3_hat - b3_null) / b3_se
+
+# Are calculated and actual z-values same
+# Yes
+b3_z == z_calc
+
+# Find p-value manually
+p_calc = 2 * pnorm(abs(z_calc), mean = 0, sd = 1, lower.tail = FALSE)
+
+# Are calculated and actual p-values same
+# Yes
+p_calc == summary(model)$coefficients[4, 'Pr(>|z|)']
+
+p_calc
+```
+
+## Question 4
+
+```{r}
+# quiz_data
+model_start = glm(y ~ ., data = quiz_data, family = binomial)
+model_bic = step(model_start, direction = "backward", k = log(nrow(quiz_data)), trace = 0)
+summary(model_bic)
+
+# Testing initial model with BIC model
+anova(model_start, model_bic, test = "LRT")
+
+# Are ANOVA test and custom calculation resulting in same test statistic (Chi-squared)
+# Yes
+-2 * as.numeric(logLik(model_start) - logLik(model_bic))
+```
+
+## Question 5
+
+```{r}
+# quiz_data
+# fit the model here
+model_start = glm(y ~ ., data = quiz_data, family = binomial)
+model_bic = step(model_start, direction = "backward", k = log(nrow(quiz_data)), trace = 0)
+
+library(boot)
+set.seed(1)
+
+# nrow(quiz_data)
+# Splitting train and test data
+# trn_idx = sample(nrow(quiz_data), 80)
+
+# calculate the metric here
+# Why are there two values? Is one for 1 and another for 0?
+# Did glm calculate final response automatically?
+# If yes, then did it select threshold = 0.5 automatically?
+cv.glm(quiz_data, model_bic, K = 5)$delta[1]
+
+# Calculating manually - Remember it is logit not final response
+# Since we are comparing > 0 it means we are thinking threshold p(x) = 0.5
+# At 0.5 log(expression) = 0 ... Now think more.
+# mean(ifelse(predict(model) > 0, 1, 0) != quiz_data$y)
+```
+

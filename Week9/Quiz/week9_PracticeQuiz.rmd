@@ -1,0 +1,109 @@
+---
+title: "Week9-Practice quiz"
+author: "Ashutosh Agarwal"
+date: "7/14/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+```{r}
+# quiz_data
+
+# model y against all but x1
+model_all = lm(y ~ . - x1, data = quiz_data)
+
+# model x1 against all other predictors.
+model_x1_against_other_predictors  = lm(x1 ~ . - y, data = quiz_data)
+
+# Residuals of model_all provides variation of y that is not explained by x2...xn
+# Residuals of other model provides variation of x1 that is not explained by x2...xn
+cor(resid(model_x1_against_other_predictors), resid(model_all))
+
+# Since value is big, we can say that including x1 will be useful.
+# Is it because, this correlation implies that there is some relationship between y and x1
+```
+
+## Question 2
+
+```{r}
+#quiz_data
+# We need to find R_5^2
+# R_j^2 is essentially R^2 of predicting x_j by using other predictors.
+# So we will fit a model to predict x5 using other predictors and find it's R^2 first
+
+model = lm(x5 ~ . - y, data=quiz_data)
+r_5_sq = summary(model)$r.squared
+vif = 1 / (1 - r_5_sq)
+vif
+```
+
+## Question 3
+
+```{r}
+#quiz_data
+model_small = lm(y ~ x1 + x2 + x3, data = quiz_data)
+model_all = lm(y ~ ., data = quiz_data)
+
+n = nrow(quiz_data)
+rss_small = sum(resid(model_small)^2)
+rss_all = sum(resid(model_all)^2)
+
+aic_small = n * log(rss_small / n) + 2 * length(model_small$coefficients)
+aic_all = n * log(rss_all / n) + 2 * length(model_all$coefficients)
+
+ifelse(aic_small < aic_all, rss_small, rss_all)
+
+```
+
+## Question 4
+
+```{r}
+# quiz_data
+model_1 = lm(y ~ x1 + x2 + x4, data = quiz_data)
+model_2 = lm(y ~ x3 + x4 + x5 + x6, data = quiz_data)
+
+min(summary(model_1)$adj.r.squared, summary(model_2)$adj.r.squared)
+```
+
+## Question 5
+
+```{r}
+# quiz_data
+model_all = lm(y ~ ., data = quiz_data)
+
+# Although default value of k for this method is 2 - which happens to be suitable for AIC
+# Still we prefer th mention it here.
+aic_model = step(model_all, direction = "backward", k = 2, trace = 0)
+err = resid(aic_model)/ (1 - hatvalues(aic_model))
+sqrt(mean(err^2))
+```
+
+
+## Assignment Q3a
+  - Trying exhaustive search
+
+```{r eval=FALSE}
+library(leaps)
+
+# Getting values of n and p so that we can calculate AIC later.
+full_mod = lm(price ~ ., data = sac_trn_data)
+p = length(coef(full_mod))
+n = nrow(sac_trn_data)
+
+# Get best model for each parameter size
+all_mod_sac = summary(regsubsets(price ~ ., data = sac_trn_data))
+
+# Calculating AIC for all models
+all_mod_aic = n * log(all_mod_sac$rss / n) + 2 * (2:p)
+
+# Train model with lowest AIC
+best_aic_ind = which.min(all_mod_aic)
+mod_sac1 = lm(price ~ beds + sqft + type + latitude + longitude + limits, data = sac_trn_data)
+extractAIC(mod_sac1)
+extractAIC(mod_sac)
+```

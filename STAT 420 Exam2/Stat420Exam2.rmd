@@ -1,0 +1,106 @@
+---
+title: "Exam2"
+author: "Ashutosh Agarwal"
+date: "8/1/2021"
+output: html_document
+---
+
+## Exam2
+
+# 1 
+
+
+```{r}
+
+```
+# 4
+
+```{r}
+library(boot)
+model = lm(time ~ poison + treat, data = poisons)
+ifelse(shapiro.test(resid(model))$p < 0.01, "reject", "fail to reject")
+
+```
+
+# 5 - Check again
+
+```{r}
+x1 = 7
+x2 = 4
+mean = 6 + 2 * x1 - 3 * x2
+sd = sqrt(x1 + 2 * x2)
+pnorm(q = 5, mean = mean, sd = sd, lower.tail = FALSE)
+```
+
+# 6
+
+```{r}
+model = lm(log(medv) ~ rm + lstat + I(lstat ^ 2), data = Boston)
+coef(model)[4]
+```
+# 7
+
+```{r}
+model = lm(log(medv) ~ age + lstat + I(lstat ^ 2), data = Boston)
+exp(predict(model, newdata = data.frame(age = 71, lstat = 11)))
+```
+
+
+# 8, 9 - ans 0.2378213
+
+```{r}
+airquality = na.omit(airquality)
+fit = lm(Ozone ~ ., data = airquality)
+
+# 8
+max(cooks.distance(fit)[which(cooks.distance(fit) > 4 / nrow(airquality))])
+
+# 9 - ans 2
+sum(hatvalues(fit) > 2 * mean(hatvalues(fit)))
+```
+
+# 10 - Check
+
+```{r}
+fit = lm(Ozone ~ ., data = airquality)
+
+n = nrow(airquality)
+bkBIC10 = step(fit, direction = "backward", k = log(n), trace = 0)
+# summary(bkBIC11)
+
+sum(resid(bkBIC10) ^ 2)
+```
+
+# 11
+
+```{r}
+fit = lm(Ozone ~ ., data = airquality)
+bkAIC11 = step(fit, direction = "backward", k = 2, trace = 0)
+summary(bkAIC11)$adj.r.squared
+```
+
+# 12 - Check
+
+```{r}
+bwtModel = glm(low ~ age + bwt + smoke, data = birthwt, family = binomial)
+
+coef(bwtModel)["age"]
+```
+#13
+
+```{r}
+summary(bwtModel)
+```
+# 14 - Check
+
+```{r}
+predict(bwtModel, newdata = data.frame(age = 25, bwt = 140, smoke = 0), type = "response")
+```
+#15 
+
+```{r}
+null_model = glm(low ~ age, data = birthwt, family = binomial)
+an = anova(null_model, bwtModel, test = 'LRT')
+an$`Pr(>Chi)`
+```
+

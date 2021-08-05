@@ -1,0 +1,132 @@
+---
+title: "Stat420Exam2_Practice"
+author: "Ashutosh Agarwal"
+date: "8/1/2021"
+output: html_document
+---
+
+## Week 7
+
+# 1
+
+```{r}
+library(MASS)
+simpleModel = lm(Hwt ~ Bwt, data = cats[cats$Sex == 'F', ])
+coef(simpleModel)["Bwt"]
+```
+
+# 2
+
+```{r}
+library(MASS)
+interModel = lm(Hwt ~  Bwt * Sex, data = cats)
+coef(interModel)["Bwt"]
+```
+
+# 3
+
+```{r}
+library(MASS)
+addModel = lm(Hwt ~  Bwt * Sex, data = cats)
+coef(interModel)["Bwt"] + coef(interModel)["Bwt:SexM"]
+```
+
+# 4
+
+```{r}
+library(MASS)
+addModel = lm(Hwt ~  Bwt + Sex, data = cats)
+female = coef(addModel)["Bwt"]
+male = coef(addModel)["Bwt"]
+male - female
+```
+
+# 5
+
+```{r}
+library(MASS)
+addModel = lm(Hwt ~  Bwt + Sex, data = cats)
+interModel = lm(Hwt ~  Bwt * Sex, data = cats)
+
+# Additive model is subset of interModel therefore we can use ANOVA test.
+an = anova(addModel, interModel)
+an$F[2]
+```
+# 6
+
+```{r}
+library(MASS)
+addModel = lm(Hwt ~  Bwt + Sex, data = cats)
+interModel = lm(Hwt ~  Bwt * Sex, data = cats)
+
+# Additive model is subset of interModel therefore we can use ANOVA test.
+an = anova(addModel, interModel)
+ifelse(an$`Pr(>F)`[2] < 0.05, "Reject additive model", "Failed to reject additive model.")
+```
+
+# 7
+
+```{r}
+iris_add = lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+predict(iris_add, newdata = data.frame(Petal.Length = 5.1, Species = "versicolor"))
+```
+
+# 8
+
+```{r}
+library(MASS)
+iris_add = lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+confint(iris_add, parm = "Speciesvirginica", level = 0.9)
+```
+
+#9 
+
+```{r}
+library(MASS)
+iris_add = lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+iris_add_np_spec = lm(Sepal.Length ~ Petal.Length, data = iris)
+an = anova(iris_add_np_spec, iris_add)
+an$F[2]
+```
+
+# 10
+
+```{r}
+iris_int = lm(Sepal.Length ~ Petal.Length * Species, data = iris)
+length(coef(iris_int))
+```
+
+# 11
+
+```{r}
+iris_int = lm(Sepal.Length ~ Petal.Length * Species, data = iris)
+predict(iris_int, newdata = data.frame(Petal.Length = 5.1, Species = "versicolor"), level = 0.99, interval = c("predict"))[3]
+```
+
+# 12
+
+```{r}
+iris_int = lm(Sepal.Length ~ Petal.Length * Species, data = iris)
+coef(iris_int)["Petal.Length"] + coef(iris_int)["Petal.Length:Speciesversicolor"]
+```
+
+# 13
+
+```{r}
+an = anova(iris_add, iris_int)
+ifelse(an$`Pr(>F)`[2] < 0.01, "Interactive", "Additive")
+```
+
+# 14
+
+```{r}
+model = lm(Fertility ~ Education * Catholic * Infant.Mortality, data = swiss)
+coef(model)["Education"] + coef(model)["Education:Catholic"] * 90 + coef(model)["Education:Infant.Mortality"] * 20 + coef(model)["Education:Catholic:Infant.Mortality"] * 20 * 90
+```
+
+# 15
+
+```{r}
+summary(model)$coefficients["Education:Catholic:Infant.Mortality", "Pr(>|t|)"]
+```
+

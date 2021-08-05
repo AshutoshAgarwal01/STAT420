@@ -1,0 +1,239 @@
+---
+title: "Week7 - Quiz"
+author: "Ashutosh Agarwal"
+date: "7/2/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Quiz
+
+Load MASS library.
+
+```{r}
+library(MASS)
+```
+
+# Question 1 - Simple model
+
+Use the simple model to estimate the change in average heart weight when body weight is increased by 1 kilogram, for a female cat.
+
+**Attempt 1 - incorrect**
+```{r}
+simpleModelFemale = lm(Hwt ~ Bwt, data = cats[cats$Sex == "F", ])
+simpleModelFemale$coefficients["Bwt"]
+```
+
+**Attempt 2 - did not change answer.**
+
+**Attempt 3 - correct**
+
+```{r}
+simpleModelFemale = lm(Hwt ~ Bwt, data = cats)
+simpleModelFemale$coefficients["Bwt"]
+```
+
+
+# Question 2 - Interaction model - Female data
+
+Use the interaction model to estimate the change in average heart weight when body weight is increased by 1 kilogram, for a female cat.
+
+```{r}
+interactionModel = lm(Hwt ~ Bwt * Sex, data = cats)
+
+# Since we are interested in Female cats only, consider SexM = 0 and then look at the coefficients.
+# It will be simply "(Intercept)          Bwt"
+# Therefore we are selecting "Bwt"
+slopeFemale = interactionModel$coefficients["Bwt"]
+interceptFemale = interactionModel$coefficients["(Intercept)"]
+
+slopeFemale
+```
+
+# Question 3 - Interaction model - Male data
+
+Use the interaction model to estimate the change in average heart weight when body weight is increased by 1 kilogram, for a male cat.  
+
+```{r}
+interactionModel = lm(Hwt ~ Bwt * Sex, data = cats)
+
+# for male cat x2 = 1 therefore equation can be rewritten as 
+# b0 + b2 + (b1 + b3) * x1
+# Our slope is b1 + b3
+slopeMale = interactionModel$coefficients["Bwt"] + interactionModel$coefficients["Bwt:SexM"]
+interceptMale = interactionModel$coefficients["(Intercept)"] + interactionModel$coefficients["SexM"]
+
+slopeMale
+```
+
+# Question 4 - Additive model
+
+Use the additive model to estimate the difference in the change in average heart weight when body weight is increased by 1 kilogram between a male and female cat.
+
+```{r}
+additiveModel = lm(Hwt ~ Bwt + Sex, data = cats)
+
+# Rewritten equation for male and female cats
+# male --> b0 + b2 + b1 * x1
+# female --> b0 + b1 * x1
+# In both cases slope is b1. Therefore diff will be zero.
+slopeMale = additiveModel$coefficients["Bwt"]
+slopeFemale = additiveModel$coefficients["Bwt"]
+
+slopeMale - slopeFemale 
+```
+
+# Question 5 - F-Test
+
+Use an FF test to compare the additive and interaction models. Report the value of the FF test statistic. 
+
+```{r}
+# Additive model is subset of interModel therefore we can use ANOVA test.
+# Check this by printing both models.
+anova(additiveModel, interactionModel)[2, "F"]
+```
+
+# Question 6 - Significance test.
+
+Carry out the test in Question 5 using $\alpha$ = 0.05. Based on this test, which model is preferred? 
+
+```{r}
+# For a very low p-value, we reject null hyp.
+# If p-val < alpha then we reject null hyp (additive model). In other words, we select interactive model.
+ifelse(anova(additiveModel, interactionModel)[2, "Pr(>F)"] < 0.05, "Interactive", "Additive")
+```
+
+# Question 7
+
+For Questions 7-13, use the iris dataset which is built into R. Use ?iris to learn about this dataset. (Note that this model would be somewhat odd in practice. Usually it would make sense to predict species from characteristics, or characteristics from species. Here we’re using a combination of characteristics and species to predict other characteristics, for illustrative purposes.)  
+
+Using the model fit with the given code, predict the sepal length of a versicolor with a petal length of 5.10.
+
+```{r}
+iris_add = lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+predict(iris_add, newdata = data.frame(Petal.Length = 5.1, Species = "versicolor"))
+```
+
+# Question 8
+
+Continue to use the model from Question 7. Create a 90% confidence interval for the difference in mean sepal length between virginicas and setosas for a given petal length. Report the lower bound of this interval.
+
+**Attempt1 - Incorrect**
+
+```{r}
+iris_add = lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+virginica = predict(iris_add, newdata = data.frame(Petal.Length = 5.1, Species = "virginica"), interval = "predict", level = 0.9)
+setosa = predict(iris_add, newdata = data.frame(Petal.Length = 5.1, Species = "setosa"), interval = "predict", level = 0.9)
+
+(virginica - setosa)[2]
+```
+
+**Attempt2 - Correct**
+
+- Sepal.Length when it's Virginica
+
+(beta_0 + beta_3) + beta_1 * Petal.Length
+
+- Sepal.Length when it's Setosa
+
+beta_0 + beta_1 * Petal.Length
+
+- Difference between Sepal.Length for given value of Petal.Length between virginica and Setosa
+
+beta_3
+
+- Thus we need to find 90% confidence interval of beta_3
+
+```{r}
+iris_add = lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+confint(iris_add, parm = "Speciesvirginica", level = 0.9)[1]
+```
+
+# Question 9
+
+Continue to use the model from Question 7. Perform a test that compares this model to one without an effect for species. Report the value of the test statistic for this test.
+
+```{r}
+# Since there is difference of two coefficients, we cannot perform t-test.
+# Hence we are performing F-test and statistic will be F-statistic.
+iris_add = lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+iris_add_wo_species = lm(Sepal.Length ~ Petal.Length, data = iris)
+anova(iris_add_wo_species, iris_add)[2, "F"]
+```
+
+# Question 10
+
+Now consider the model with the interaction given above. Excluding $\sigma^2$, how many parameters does this model have? Stated another way, if written mathematically, how many $\beta$ parameters are in the model?
+ 
+```{r}
+iris_int = lm(Sepal.Length ~ Petal.Length * Species, data = iris)
+length(iris_int$coefficients)
+```
+ 
+# Question 11
+
+Using the interaction model fit with the given code, create a 99% prediction interval for the sepal length of a versicolor with a petal length of 5.10. Report the upper bound of this interval.
+
+```{r}
+iris_int = lm(Sepal.Length ~ Petal.Length * Species, data = iris)
+predict(iris_int, newdata = data.frame(Petal.Length = 5.1, Species = "versicolor"), interval = "predict", level = 0.99)[3]
+```
+
+# Question 12
+
+Using the interaction model fit with the given code, obtain an estimate of the change in mean sepal length for a petal length increase of 1 unit, for a versicolor.
+
+```{r}
+iris_int = lm(Sepal.Length ~ Petal.Length * Species, data = iris)
+
+# we have been asked slope of the line when species "versicolor" is selected.
+iris_int$coefficients["Petal.Length"] + iris_int$coefficients["Petal.Length:Speciesversicolor"]
+```
+
+# Question 13
+
+Compare the two previous models, the additive and interaction models, using an ANVOA FF test using $\alpha = 0.01$. Based on this test, which model is preferred?
+
+```{r}
+iris_add = lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+iris_int = lm(Sepal.Length ~ Petal.Length * Species, data = iris)
+ifelse(anova(iris_add, iris_int)[2, "Pr(>F)"] < 0.01, "Interation model", "Additive model")
+```
+
+# Question 14
+
+Fit a multiple linear model with Fertility as the response and Education, Catholic, and Infant.Mortality as predictors. Use the first order terms as well as all two- and three-way interactions.  
+
+Use this model to estimate the change in mean Fertility for an increase of Education of one unit when Catholic is 90.0 and Infant.Mortality is 20.0. 
+  
+```{r}
+model = lm(Fertility ~ Education * Catholic * Infant.Mortality, data = swiss)
+ce = model$coefficients
+ce["Education"] + 90 * ce["Education:Catholic"] + 20 * ce["Education:Infant.Mortality"] + 90 * 20 * ce["Education:Catholic:Infant.Mortality"]
+```
+
+# Question 15
+
+Test for the significance of the three-way interaction in the model from Question 14. Report the p-value of this test.  
+
+**Answer**
+
+There are two ways of doing this test
+
+- 1. Create two way and three way models and perform anova test.
+
+```{r}
+three_way_int_model = lm(Fertility ~ Education * Catholic * Infant.Mortality, data = swiss)
+two_way_int_model = lm(Fertility ~ Education * Catholic + Catholic * Infant.Mortality + Education * Infant.Mortality, data = swiss)
+anova(two_way_int_model, three_way_int_model)[2, "Pr(>F)"]
+```
+
+- 2. Since there is difference of only one term in both models, we could simply check p-value of coefficient of 3-way term in the three-way model. Values from anova test and t-test should be same.
+
+```{r}
+summary(three_way_int_model)$coefficients["Education:Catholic:Infant.Mortality", "Pr(>|t|)"]
+```
+

@@ -1,0 +1,332 @@
+## Question 1
+Consider a random variable X that has a t distribution with 5 degrees of freedom. Calculate P[|X| > 2.1]
+
+**Answer1:**
+This is just for explaining in detail. When we say |x| > 2.1 we want to calculate area under t-distribution that lies after 2.1 and before -2.1
+
+```{r}
+areaAboveThr = pt(q = 2.1, df = 5, lower.tail = FALSE)
+areaUnderThr = pt(q = -2.1, df = 5, lower.tail = TRUE)
+areaAboveThr + areaUnderThr
+```
+
+**Answer 2:**
+Since t-distribution is symmetric, we do not need to find both areas explicitly. We can simply double any one of them to get answer
+
+```{r}
+2 * pt(q = 2.1, df = 5, lower.tail = FALSE)
+```
+
+**or **
+
+```{r}
+2 * pt(q = -2.1, df = 5, lower.tail = TRUE)
+```
+
+**Answer 3: Without using lower.Tail**
+Default parameter is lower.Tail = True. Therefore, we will get entire area from negative infinity to this point.
+now depending on what is the value of q (positive or negative), we will need to change the approach
+
+**if q is negative:**
+
+```{r}
+2 * pt(q = -2.1, df = 5)
+```
+
+**if q is positive: In this case we will get area which includes center part as well that we do not want.**
+
+```{r}
+2 * (1 - pt(q = 2.1, df = 5))
+```
+
+**Verdict: Always use abs value to avoid any confusion. Because abs will always be positive.**
+**CAUTION: Do not forget to multiply by 2**
+
+```{r}
+2 * pt(q = abs(2.1), df = 5, lower.tail = FALSE)
+```
+
+## Question 2:
+Calculate the critical value used for a 90% confidence interval about the slope parameter of a simple linear regression model that is fit to 10 observations. (Your answer should be a positive value.)  
+
+**Answer**
+90 percent confidence interval means interval between 0.05 and 0.95. The value at 0.95 will be considered as critical value because this is positive (i.e. we can use it safely to add and subtract) from mean.
+
+Note that value at 0.05 will be negative. It's absolute value will be same as at 0.95.
+
+Degrees of freedom for multi-linear regression is **n - p**. Where n is number of observations and p is number of coefficients.
+
+In case of SLR p = 2 therefor degree of freedom in this case will be **10 - 2 = 8**
+
+```{r}
+qt(p = 0.95, df = 8)
+```
+
+## Question 3:
+
+Consider the true simple linear regression model 
+
+$Y_i = 5 + 4x_i + \epsilon_i$ $\epsilon_i ~ N(0, \sigma^2 = 4)$ $i = 1, 2, ...20$
+
+Given $S_{xx} = 1.5$, calculate the probability of observing data according to this model, fitting the SLR model, and obtaining an estimate of the slope parameter greater than 4.2. 
+
+In other words, calculate $P[\hat\beta_1 > 4.2]$
+
+**Answer**
+
+If we fit infinite models through sampling then we will get sampling distribution of $\hat\beta_1$ and $\hat\beta_0$.
+
+Both of these will follow Normal distribution since Y is linear combination of these two and Y is normally distributed.
+
+**Why Normal? Why not t-distribution with n - 2 degrees of freedom**
+
+Recall from Bluman's book (Chapter 7) that we use z-test to calculate confidence interval when standard deviation of the population is known however when standard deviation of population is unknown and only standard deviation of sample is known then we use t-test to find confidence interval.
+
+It's proof (kinda) is here (Section8.3): http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#standard-errors
+
+Since we know population standard deviation we will use pnorm else we would have used pt.
+
+We can use pnorm to find this probability. lower.tail = False because we want probability higher than the value.
+
+```{r eval=FALSE}
+pnorm(q = 4.2, mean = 4, sd = ?, lower.tail = FALSE)
+```
+
+We know mean: 4
+
+How do we know standard deviation?
+
+Recall that **when we know standard deviation of Y**. We can find standard deviation of $\hat\beta_1$ as follows:
+$SD[\hat\beta_1] = \frac{\sigma}{\sqrt(S_xx)}$
+
+And **if we do not know standard deviation of Y**. Then we can use standard error of the model ($\s_e$) to estimate standard error of coefficients $SE[\hat\beta_1] = \frac{s_e}{\sqrt(S_xx)}$
+
+```{r}
+sigma = 2
+sxx = 1.5
+sd_beta_1 = 2 / sqrt(sxx)
+mean_beta_1 = 4
+pnorm(q = 4.2, mean = mean_beta_1, sd = sd_beta_1, lower.tail = FALSE)
+```
+
+## Question 4:
+Suppose we would like to predict the duration of an eruption of the Old Faithful geyser in Yellowstone National Park based on the waiting time before an eruption. Fit a simple linear model in R that accomplishes this task.
+
+What is the value of $SE[\hat\beta_1]$?
+
+**Answer:**
+
+Summary of the model provides wealth of information. We need to find standard error of the coefficient $\hat\beta_1$
+
+In other words, we have this one sample of faithful data in R (not entire population). So we do not know population standard deviation. We can however find **standard deviation of this sample a.k.a. std. error**.
+
+There are two places std. error is available in summary.
+
+- With coefficients
+  - This is the standard error of the coefficients based on this sample.
+
+- At model level "Residual standard error" `summary(model)$sigma`
+
+```{r}
+model = lm(eruptions ~ waiting, data = faithful)
+summary(model)$coefficients["waiting", "Std. Error"]
+```
+
+## Question 5:
+
+What is the value of the test statistic for testing $H_0: \beta_0 = 0$ vs $H_1: \beta_0 \neq 0$
+
+**Answer:**
+
+- Null hypothesis $H_0: \beta_0 = 0$
+- Alternate hypothesis $H_1: \beta_0 \neq 0$
+
+We always assume that null hypothesis is true and see if we can reject null hypothesis.
+
+**What is test-statistic in this case?** We know that we are dealing with sample here (not population) therefore we will be playing with t-distribution. Hence test-statistic in this case will be a t-value (or certain value in t-distribution).
+
+As per null hypothesis, we want to find t-values under which we can safely say that $\beta_0$ (mean of $\beta_0$) is zero (recall that we assume null hypothesis is true).
+
+This information is available in summary for each coefficient under "t value" column.
+
+**Remember** We estimate mean using t-distribution.
+
+```{r}
+model = lm(eruptions ~ waiting, data = faithful)
+summary(model)$coefficients["(Intercept)", "t value"]
+```
+
+## Question 6:
+
+What is the value of the test statistic for testing $H_0: \beta_1 = 0$ vs $H_1: \beta_1 \neq 0$
+
+**Important** In case of simple linear regression this is equivalent of testing if these is any significant linear relationship between predictor and response. This is because we have only one predictor in this case and that is associated with $\beta_1$
+
+$Y = \beta_0 + \beta_1x_i$ if $\beta_1 = 0$ then there is no significant linear relationship.
+
+In case of MLR we cannot do that by simply doing a test on $\beta_1$ because there would be other coefficients as well. In case of MLR we use F-statistic. F-statistic compares variation between two models.
+
+**Special case** F-statistic can be used for SLR as well. In case of SLR F-statistic is equal to square of t-value of $\beta_1$
+
+
+```{r}
+model = lm(eruptions ~ waiting, data = faithful)
+summary(model)$coefficients["waiting", "t value"]
+```
+
+## Question 7:
+
+Test $H_0: \beta_1 = 0$ vs $H_1: \beta_1 \neq 0$ with $\alpha = 0.01$. What decision do you make?
+
+**Answer**
+
+In other words, can we say with 99% confidence that $\beta_1 = 0$?
+
+![Making decisions](tDistribution.jpg)
+
+- **First chart (Reject null hypothesis):** As per our assumption $\beta_1 = 0$ should not have been found in area between $t_\frac{\alpha}{2}$ and $+t_1$. However we found that, which means our assumption was not correct. Therefore we can reject null hypothesis.
+
+- **Second chart (Fail to reject null hypothesis):** Final range in which $\beta_1 = 0$ could be found was between $-t_1$ and $+\t_1$. This range is within $-t_\frac{\alpha}{2}$ and $+t_\frac{\alpha}{2}$. Which means our assumption was correct. Therefore we fail to reject null hypothesis.
+
+- **Simplify**
+  - If **P-Value** is very small then we can reject null hypothesis for any reasonable value of $\alpha$
+  
+  - If **t-statistic** is to the left of $+t_\frac{\alpha}{2}$ then we fail to reject else we reject null hypothesis.
+
+We can solve this problem with t-values and p-values both.
+
+- **t-value**
+
+Find t-value at $\alpha = 0.01$
+
+```{r}
+model = lm(eruptions ~ waiting, data = faithful)
+crit = summary(model)$coefficients["waiting", "t value"]
+t = qt(p = 0.995, df = length(faithful$eruptions) - 2, lower.tail = TRUE)
+ifelse(crit < t, "Fail to reject", "Reject")
+```
+
+- **p-value:**
+
+```{r}
+alpha = 0.01
+model = lm(eruptions ~ waiting, data = faithful)
+pval = summary(model)$coefficients["waiting", "Pr(>|t|)"]
+ifelse(pval < alpha, "Reject", "Fail to reject")
+```
+
+## Question 8:
+
+Calculate a 90% confidence interval for $\beta_0$ Report the upper bound of this interval.
+
+**Answer**
+
+$CI = EST \pm MARGIN$
+
+$CI = EST \pm CRIT * SE$
+
+Since we want to find confidence interval of $\beta_0$ we need to calculate $SE$ accordingly.
+
+$SE[\hat\beta_0] = s_e \sqrt(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}})$
+
+$CI_\alpha = mean \pm t_\frac{\alpha}{2} * s_e \sqrt(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}})$
+
+We could find that by using `confint` method as well.
+
+```{r}
+model = lm(eruptions ~ waiting, data = faithful)
+confint(model, parm = "(Intercept)", level = 0.9)[2]
+```
+
+## Question 9:
+
+Calculate a 95% confidence interval for $\beta_1$. Report the length of the margin of this interval.
+
+**Answer:** 
+
+We know that mean is present at center of confidence interval. i.e. `mean(CI) = mean`. We can calculate range using this logic.
+
+```{r}
+model = lm(eruptions ~ waiting, data = faithful)
+c = confint(model, parm = "waiting", level = 0.95)
+c[2] - mean(c)
+```
+
+## Question 10:
+
+Create a 90% confidence interval for the mean eruption duration for a waiting time of 81 minutes. Report the lower bound of this interval.  
+
+**Answer:**
+
+We have been asked to find Confidence interval of response at predictor's value of 81.
+
+- Confidence interval - because it's "mean" eruption duration.
+- Of response - because it's mean "eruption duration".
+
+We use `predict` to find confidence or prediction intervals of response.
+
+```{r}
+model = lm(eruptions ~ waiting, data = faithful)
+predict(model, newdata = data.frame(waiting = 81), level = 0.9, interval = c("confidence"))[1, "lwr"]
+```
+
+## Question 11:
+
+Create a 99% prediction interval for a new observation's eruption duration for a waiting time of 72 minutes. Report the upper bound of this interval. 
+
+**Answer**
+
+Same as above, but we need prediction interval this time.
+
+```{r}
+model = lm(eruptions ~ waiting, data = faithful)
+predict(model, newdata = data.frame(waiting = 72), level = 0.99, interval = c("prediction"))[1, "upr"]
+```
+
+## Question 12:
+
+Consider a 90% confidence interval for the mean response and a 90% prediction interval, both at the same xx value. Which interval is narrower? 
+
+**Answer:**
+
+Confidence interval will be narrow because this represents mean which varies less than absolute value (prediciton interval)
+
+## Question 13:
+
+Suppose you obtain a 99% confidence interval for $\beta_1$that is (-0.4, 5.2)(−0.4,5.2). Now test $H_0: \beta_1 = 0$ vs $H_1: \beta_1 \neq 0$ with $\alpha = 0.01$. What decision do you make?
+
+**Answer:**
+
+99% confidence interval means $\alpha = 0.01$. We can see that $\beta_1 = 0$ lies well within 99% confidence interval. In other words we are 99% confident that $\beta_1 = 0$ is zero.
+
+Therefore we fail to reject null hypothesis.
+
+
+## Question 14:
+
+Question 14
+Suppose you test $H_0: \beta_1 = 0$ vs $H_1: \beta_1 \neq 0$ with  $\alpha = 0.01$ and fail to reject $\H_0$. Select all of the following that must always be true:
+
+**Answer:**
+
+- We would also fail to reject at $\alpha = 0.05$ - Not correct.
+
+- The value of $\beta_1$ is very small. For example, it could not be 1.2. - Incorrect. $\beta_1 = 0$ lies between large range does not mean that beta will certainly be very small.
+
+- There is no relationship between the response and the predictor. - Incorrect. We may say that there is no "significant" relationship though.
+
+- The probability that $\beta_1 = 0$ is very high. - Correct. We are 99% confident that $\beta_1 = 0$.
+
+- The probability of observing the estimated value of $\beta_1$ (or something more extreme) is greater than 0.01 if we assume that $\beta_1 = 0$. - Correct. 
+
+## Question 15:**
+
+Consider a 95% confidence interval for the mean response calculated at x = 6. If instead we calculate the interval at x = 7, select each value that would change:
+
+**Answer:**
+
+- Critical Value - Incorrect. This has nothing to do with a data point.
+
+- Standard Error - Incorrect. 
+
+- Estimate - Correct.

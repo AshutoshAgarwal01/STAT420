@@ -1,0 +1,166 @@
+---
+title: "Week9Repeat"
+author: "Ashutosh Agarwal"
+date: "8/1/2021"
+output: html_document
+---
+
+## Week 9
+
+# 1
+
+
+```{r}
+model = lm(mpg ~ ., data = mtcars)
+max(faraway::vif(model))
+```
+
+# 2
+
+
+```{r}
+model = lm(mpg ~ ., data = mtcars)
+summary(model)$adj.r.squared
+```
+
+# 3
+
+
+```{r}
+looc = function(model){
+  v = (resid(model) / (1 - hatvalues(model)))^2
+  sqrt(mean(v))
+}
+
+model = lm(mpg ~ ., data = mtcars)
+looc(model)
+```
+
+# 4
+
+
+```{r}
+model = lm(mpg ~ ., data = mtcars)
+step(model, direction = "backward", k = 2, trace = 0)
+```
+
+# 5
+
+```{r}
+looc = function(model){
+  v = (resid(model) / (1 - hatvalues(model)))^2
+  sqrt(mean(v))
+}
+
+model = lm(mpg ~ ., data = mtcars)
+selected = step(model, direction = "backward", k = 2, trace = 0)
+looc(selected)
+```
+
+
+
+# 6
+
+```{r}
+looc = function(model){
+  v = (resid(model) / (1 - hatvalues(model)))^2
+  sqrt(mean(v))
+}
+
+model = lm(mpg ~ ., data = mtcars)
+selected = step(model, direction = "backward", k = 2, trace = 0)
+max(faraway::vif(selected))
+```
+
+
+# 7
+
+Selected model is better for predicting and does not have collinearity issues.
+
+# 8
+
+```{r}
+n = nrow(mtcars)
+model_start = lm(mpg ~ 1, data = mtcars)
+# step(model_start, scope = mpg ~ .,                                                          direction = "forward", k = log(n), trace = 0,)
+step(model_start, scope = mpg ~ cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb, direction = "forward", k = log(n), trace = 0)
+```
+
+# 9
+
+```{r}
+looc1 = function(model)
+{
+  v = (resid(model) / (1 - hatvalues(model)))^2
+  sqrt(mean(v))
+}
+
+n = nrow(mtcars)
+model_start = lm(mpg ~ 1, data = mtcars)
+final = step(model_start, scope = mpg ~ cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb, direction = "forward", k = log(n), trace = 0)
+looc1(final)
+
+```
+
+# 10
+
+```{r}
+modelREsp = lm(sr ~ . - ddpi, data = LifeCycleSavings)
+modelPred = lm(ddpi ~ . - sr, data = LifeCycleSavings)
+cor(resid(modelPred), resid(modelREsp))
+```
+
+# 11
+
+```{r}
+model11 = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+summary(model11)$adj.r.squared
+```
+
+# 12
+
+```{r}
+n = nrow(LifeCycleSavings)
+model = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+model12 = step(model, direction = "backward", k = log(n), trace = 0)
+model12
+```
+
+# 13
+
+```{r}
+n = nrow(LifeCycleSavings)
+model = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+model13 = step(model, direction = "backward", k = 2, trace = 0)
+model13
+```
+
+# 14
+
+```{r}
+looc = function(model)
+{
+  v = (resid(model) / (1 - hatvalues(model)))^2
+  sqrt(mean(v))
+}
+
+model11 = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+
+model = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+model13 = step(model, direction = "backward", k = 2, trace = 0)
+
+min(looc(model11), looc(model13), looc(lm(sr ~ ., data = LifeCycleSavings)))
+```
+
+# 15
+
+```{r}
+model11 = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+
+model = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+model13 = step(model, direction = "backward", k = 2, trace = 0)
+addmodel = lm(sr ~ ., data = LifeCycleSavings)
+
+max(summary(model11)$adj.r.squared, summary(model13)$adj.r.squared, summary(addmodel)$adj.r.squared)
+```
+

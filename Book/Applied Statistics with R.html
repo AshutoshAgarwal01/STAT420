@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)http://daviddalpiaz.github.io/appliedstats/ -->
+<html lang="" xml:lang=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Applied Statistics with R</title>
+  <meta name="description" content="Applied Statistics with R">
+  <meta name="generator" content="bookdown 0.22.3 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Applied Statistics with R">
+  <meta property="og:type" content="book">
+  <meta property="og:url" content="https://daviddalpiaz.github.io/appliedstats/">
+  
+  
+  <meta name="github-repo" content="daviddalpiaz/appliedstats">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Applied Statistics with R">
+  
+  
+  
+
+
+
+<meta name="date" content="2021-06-11">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  <link rel="shortcut icon" href="http://daviddalpiaz.github.io/appliedstats/favicon.gif" type="image/x-icon">
+
+<link rel="next" href="http://daviddalpiaz.github.io/appliedstats/introduction-to-r.html">
+<script src="./Applied Statistics with R_files/jquery.min.js.download"></script>
+<link href="./Applied Statistics with R_files/style.css" rel="stylesheet">
+<link href="./Applied Statistics with R_files/plugin-table.css" rel="stylesheet">
+<link href="./Applied Statistics with R_files/plugin-bookdown.css" rel="stylesheet">
+<link href="./Applied Statistics with R_files/plugin-highlight.css" rel="stylesheet">
+<link href="./Applied Statistics with R_files/plugin-search.css" rel="stylesheet">
+<link href="./Applied Statistics with R_files/plugin-fontsettings.css" rel="stylesheet">
+<link href="./Applied Statistics with R_files/plugin-clipboard.css" rel="stylesheet">
+
+
+
+
+
+
+
+
+
+<script src="./Applied Statistics with R_files/empty-anchor.js.download"></script>
+<link href="./Applied Statistics with R_files/anchor-sections.css" rel="stylesheet">
+<script src="./Applied Statistics with R_files/anchor-sections.js.download"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="./Applied Statistics with R_files/style(1).css" type="text/css">
+<script type="text/javascript" src="./Applied Statistics with R_files/MathJax.js.download"></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><style type="text/css">.mjx-chtml {display: inline-block; line-height: 0; text-indent: 0; text-align: left; text-transform: none; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; letter-spacing: normal; word-wrap: normal; word-spacing: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0; min-height: 0; border: 0; margin: 0; padding: 1px 0}
+.MJXc-display {display: block; text-align: center; margin: 1em 0; padding: 0}
+.mjx-chtml[tabindex]:focus, body :focus .mjx-chtml[tabindex] {display: inline-table}
+.mjx-full-width {text-align: center; display: table-cell!important; width: 10000em}
+.mjx-math {display: inline-block; border-collapse: separate; border-spacing: 0}
+.mjx-math * {display: inline-block; -webkit-box-sizing: content-box!important; -moz-box-sizing: content-box!important; box-sizing: content-box!important; text-align: left}
+.mjx-numerator {display: block; text-align: center}
+.mjx-denominator {display: block; text-align: center}
+.MJXc-stacked {height: 0; position: relative}
+.MJXc-stacked > * {position: absolute}
+.MJXc-bevelled > * {display: inline-block}
+.mjx-stack {display: inline-block}
+.mjx-op {display: block}
+.mjx-under {display: table-cell}
+.mjx-over {display: block}
+.mjx-over > * {padding-left: 0px!important; padding-right: 0px!important}
+.mjx-under > * {padding-left: 0px!important; padding-right: 0px!important}
+.mjx-stack > .mjx-sup {display: block}
+.mjx-stack > .mjx-sub {display: block}
+.mjx-prestack > .mjx-presup {display: block}
+.mjx-prestack > .mjx-presub {display: block}
+.mjx-delim-h > .mjx-char {display: inline-block}
+.mjx-surd {vertical-align: top}
+.mjx-mphantom * {visibility: hidden}
+.mjx-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 2px 3px; font-style: normal; font-size: 90%}
+.mjx-annotation-xml {line-height: normal}
+.mjx-menclose > svg {fill: none; stroke: currentColor}
+.mjx-mtr {display: table-row}
+.mjx-mlabeledtr {display: table-row}
+.mjx-mtd {display: table-cell; text-align: center}
+.mjx-label {display: table-row}
+.mjx-box {display: inline-block}
+.mjx-block {display: block}
+.mjx-span {display: inline}
+.mjx-char {display: block; white-space: pre}
+.mjx-itable {display: inline-table; width: auto}
+.mjx-row {display: table-row}
+.mjx-cell {display: table-cell}
+.mjx-table {display: table; width: 100%}
+.mjx-line {display: block; height: 0}
+.mjx-strut {width: 0; padding-top: 1em}
+.mjx-vsize {width: 0}
+.MJXc-space1 {margin-left: .167em}
+.MJXc-space2 {margin-left: .222em}
+.MJXc-space3 {margin-left: .278em}
+.mjx-chartest {display: block; visibility: hidden; position: absolute; top: 0; line-height: normal; font-size: 500%}
+.mjx-chartest .mjx-char {display: inline}
+.mjx-chartest .mjx-box {padding-top: 1000px}
+.MJXc-processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MJXc-processed {display: none}
+.mjx-test {display: block; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow: hidden; height: 1px}
+.mjx-ex-box-test {position: absolute; overflow: hidden; width: 1px; height: 60ex}
+.mjx-line-box-test {display: table!important}
+.mjx-line-box-test span {display: table-cell!important; width: 10000em!important; min-width: 0; max-width: none; padding: 0; border: 0; margin: 0}
+#MathJax_CHTML_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.mjx-chtml .mjx-noError {line-height: 1.2; vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+.MJXc-TeX-unknown-R {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: normal; font-weight: normal}
+.MJXc-TeX-unknown-I {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: italic; font-weight: normal}
+.MJXc-TeX-unknown-B {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: normal; font-weight: bold}
+.MJXc-TeX-unknown-BI {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: italic; font-weight: bold}
+.MJXc-TeX-ams-R {font-family: MJXc-TeX-ams-R,MJXc-TeX-ams-Rw}
+.MJXc-TeX-cal-B {font-family: MJXc-TeX-cal-B,MJXc-TeX-cal-Bx,MJXc-TeX-cal-Bw}
+.MJXc-TeX-frak-R {font-family: MJXc-TeX-frak-R,MJXc-TeX-frak-Rw}
+.MJXc-TeX-frak-B {font-family: MJXc-TeX-frak-B,MJXc-TeX-frak-Bx,MJXc-TeX-frak-Bw}
+.MJXc-TeX-math-BI {font-family: MJXc-TeX-math-BI,MJXc-TeX-math-BIx,MJXc-TeX-math-BIw}
+.MJXc-TeX-sans-R {font-family: MJXc-TeX-sans-R,MJXc-TeX-sans-Rw}
+.MJXc-TeX-sans-B {font-family: MJXc-TeX-sans-B,MJXc-TeX-sans-Bx,MJXc-TeX-sans-Bw}
+.MJXc-TeX-sans-I {font-family: MJXc-TeX-sans-I,MJXc-TeX-sans-Ix,MJXc-TeX-sans-Iw}
+.MJXc-TeX-script-R {font-family: MJXc-TeX-script-R,MJXc-TeX-script-Rw}
+.MJXc-TeX-type-R {font-family: MJXc-TeX-type-R,MJXc-TeX-type-Rw}
+.MJXc-TeX-cal-R {font-family: MJXc-TeX-cal-R,MJXc-TeX-cal-Rw}
+.MJXc-TeX-main-B {font-family: MJXc-TeX-main-B,MJXc-TeX-main-Bx,MJXc-TeX-main-Bw}
+.MJXc-TeX-main-I {font-family: MJXc-TeX-main-I,MJXc-TeX-main-Ix,MJXc-TeX-main-Iw}
+.MJXc-TeX-main-R {font-family: MJXc-TeX-main-R,MJXc-TeX-main-Rw}
+.MJXc-TeX-math-I {font-family: MJXc-TeX-math-I,MJXc-TeX-math-Ix,MJXc-TeX-math-Iw}
+.MJXc-TeX-size1-R {font-family: MJXc-TeX-size1-R,MJXc-TeX-size1-Rw}
+.MJXc-TeX-size2-R {font-family: MJXc-TeX-size2-R,MJXc-TeX-size2-Rw}
+.MJXc-TeX-size3-R {font-family: MJXc-TeX-size3-R,MJXc-TeX-size3-Rw}
+.MJXc-TeX-size4-R {font-family: MJXc-TeX-size4-R,MJXc-TeX-size4-Rw}
+.MJXc-TeX-vec-R {font-family: MJXc-TeX-vec-R,MJXc-TeX-vec-Rw}
+.MJXc-TeX-vec-B {font-family: MJXc-TeX-vec-B,MJXc-TeX-vec-Bx,MJXc-TeX-vec-Bw}
+@font-face {font-family: MJXc-TeX-ams-R; src: local('MathJax_AMS'), local('MathJax_AMS-Regular')}
+@font-face {font-family: MJXc-TeX-ams-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_AMS-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_AMS-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_AMS-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-cal-B; src: local('MathJax_Caligraphic Bold'), local('MathJax_Caligraphic-Bold')}
+@font-face {font-family: MJXc-TeX-cal-Bx; src: local('MathJax_Caligraphic'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-cal-Bw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Caligraphic-Bold.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Bold.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-frak-R; src: local('MathJax_Fraktur'), local('MathJax_Fraktur-Regular')}
+@font-face {font-family: MJXc-TeX-frak-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Fraktur-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Fraktur-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Fraktur-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-frak-B; src: local('MathJax_Fraktur Bold'), local('MathJax_Fraktur-Bold')}
+@font-face {font-family: MJXc-TeX-frak-Bx; src: local('MathJax_Fraktur'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-frak-Bw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Fraktur-Bold.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Fraktur-Bold.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Fraktur-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-math-BI; src: local('MathJax_Math BoldItalic'), local('MathJax_Math-BoldItalic')}
+@font-face {font-family: MJXc-TeX-math-BIx; src: local('MathJax_Math'); font-weight: bold; font-style: italic}
+@font-face {font-family: MJXc-TeX-math-BIw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Math-BoldItalic.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Math-BoldItalic.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Math-BoldItalic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-R; src: local('MathJax_SansSerif'), local('MathJax_SansSerif-Regular')}
+@font-face {font-family: MJXc-TeX-sans-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-B; src: local('MathJax_SansSerif Bold'), local('MathJax_SansSerif-Bold')}
+@font-face {font-family: MJXc-TeX-sans-Bx; src: local('MathJax_SansSerif'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-sans-Bw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Bold.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Bold.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-I; src: local('MathJax_SansSerif Italic'), local('MathJax_SansSerif-Italic')}
+@font-face {font-family: MJXc-TeX-sans-Ix; src: local('MathJax_SansSerif'); font-style: italic}
+@font-face {font-family: MJXc-TeX-sans-Iw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Italic.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Italic.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-script-R; src: local('MathJax_Script'), local('MathJax_Script-Regular')}
+@font-face {font-family: MJXc-TeX-script-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Script-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Script-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Script-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-type-R; src: local('MathJax_Typewriter'), local('MathJax_Typewriter-Regular')}
+@font-face {font-family: MJXc-TeX-type-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Typewriter-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Typewriter-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Typewriter-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-cal-R; src: local('MathJax_Caligraphic'), local('MathJax_Caligraphic-Regular')}
+@font-face {font-family: MJXc-TeX-cal-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Caligraphic-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-B; src: local('MathJax_Main Bold'), local('MathJax_Main-Bold')}
+@font-face {font-family: MJXc-TeX-main-Bx; src: local('MathJax_Main'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-main-Bw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Main-Bold.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Bold.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Main-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-I; src: local('MathJax_Main Italic'), local('MathJax_Main-Italic')}
+@font-face {font-family: MJXc-TeX-main-Ix; src: local('MathJax_Main'); font-style: italic}
+@font-face {font-family: MJXc-TeX-main-Iw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Main-Italic.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Italic.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Main-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-R; src: local('MathJax_Main'), local('MathJax_Main-Regular')}
+@font-face {font-family: MJXc-TeX-main-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Main-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-math-I; src: local('MathJax_Math Italic'), local('MathJax_Math-Italic')}
+@font-face {font-family: MJXc-TeX-math-Ix; src: local('MathJax_Math'); font-style: italic}
+@font-face {font-family: MJXc-TeX-math-Iw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Math-Italic.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size1-R; src: local('MathJax_Size1'), local('MathJax_Size1-Regular')}
+@font-face {font-family: MJXc-TeX-size1-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Size1-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size2-R; src: local('MathJax_Size2'), local('MathJax_Size2-Regular')}
+@font-face {font-family: MJXc-TeX-size2-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Size2-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size2-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Size2-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size3-R; src: local('MathJax_Size3'), local('MathJax_Size3-Regular')}
+@font-face {font-family: MJXc-TeX-size3-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Size3-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size3-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Size3-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size4-R; src: local('MathJax_Size4'), local('MathJax_Size4-Regular')}
+@font-face {font-family: MJXc-TeX-size4-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Size4-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Size4-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-vec-R; src: local('MathJax_Vector'), local('MathJax_Vector-Regular')}
+@font-face {font-family: MJXc-TeX-vec-Rw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Vector-Regular.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Vector-Regular.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Vector-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-vec-B; src: local('MathJax_Vector Bold'), local('MathJax_Vector-Bold')}
+@font-face {font-family: MJXc-TeX-vec-Bx; src: local('MathJax_Vector'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-vec-Bw; src /*1*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/eot/MathJax_Vector-Bold.eot'); src /*2*/: url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/woff/MathJax_Vector-Bold.woff') format('woff'), url('http://mathjax.rstudio.com/latest/fonts/HTML-CSS/TeX/otf/MathJax_Vector-Bold.otf') format('opentype')}
+</style></head>
+
+<body><div id="MathJax_Message" style="display: none;"></div>
+
+
+
+  <div class="book without-animation with-summary   font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary"><div class="book-search" role="search"><label for="search-box" aria-hidden="false" hidden="hidden">Type to search</label><input id="search-box" type="search" class="form-control" placeholder="Type to search (Enter for navigation)" title="Use Enter or the &lt;Down&gt; key to navigate to the next match, or the &lt;Up&gt; key to the previous match"></div>
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="http://daviddalpiaz.github.io/appliedstats/">Applied Statistics with R</a></li>
+
+<li class="divider"></li>
+<li class="chapter active" data-level="1" data-path="index.html"><a href="http://daviddalpiaz.github.io/appliedstats/index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul style="display: block;">
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="http://daviddalpiaz.github.io/appliedstats/index.html#about-this-book"><i class="fa fa-check"></i><b>1.1</b> About This Book</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="http://daviddalpiaz.github.io/appliedstats/index.html#conventions"><i class="fa fa-check"></i><b>1.2</b> Conventions</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="http://daviddalpiaz.github.io/appliedstats/index.html#acknowledgements"><i class="fa fa-check"></i><b>1.3</b> Acknowledgements</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="http://daviddalpiaz.github.io/appliedstats/index.html#license"><i class="fa fa-check"></i><b>1.4</b> License</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction-to-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/introduction-to-r.html"><i class="fa fa-check"></i><b>2</b> Introduction to <code>R</code></a><ul style="display: none;">
+<li class="chapter" data-level="2.1" data-path="introduction-to-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/introduction-to-r.html#getting-started"><i class="fa fa-check"></i><b>2.1</b> Getting Started</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction-to-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/introduction-to-r.html#basic-calculations"><i class="fa fa-check"></i><b>2.2</b> Basic Calculations</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction-to-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/introduction-to-r.html#getting-help"><i class="fa fa-check"></i><b>2.3</b> Getting Help</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction-to-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/introduction-to-r.html#installing-packages"><i class="fa fa-check"></i><b>2.4</b> Installing Packages</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html"><i class="fa fa-check"></i><b>3</b> Data and Programming</a><ul style="display: none;">
+<li class="chapter" data-level="3.1" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#data-types"><i class="fa fa-check"></i><b>3.1</b> Data Types</a></li>
+<li class="chapter" data-level="3.2" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#data-structures"><i class="fa fa-check"></i><b>3.2</b> Data Structures</a><ul style="display: none;">
+<li class="chapter" data-level="3.2.1" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#vectors"><i class="fa fa-check"></i><b>3.2.1</b> Vectors</a></li>
+<li class="chapter" data-level="3.2.2" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#vectorization"><i class="fa fa-check"></i><b>3.2.2</b> Vectorization</a></li>
+<li class="chapter" data-level="3.2.3" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#logical-operators"><i class="fa fa-check"></i><b>3.2.3</b> Logical Operators</a></li>
+<li class="chapter" data-level="3.2.4" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#more-vectorization"><i class="fa fa-check"></i><b>3.2.4</b> More Vectorization</a></li>
+<li class="chapter" data-level="3.2.5" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#matrices"><i class="fa fa-check"></i><b>3.2.5</b> Matrices</a></li>
+<li class="chapter" data-level="3.2.6" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#lists"><i class="fa fa-check"></i><b>3.2.6</b> Lists</a></li>
+<li class="chapter" data-level="3.2.7" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#data-frames"><i class="fa fa-check"></i><b>3.2.7</b> Data Frames</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#programming-basics"><i class="fa fa-check"></i><b>3.3</b> Programming Basics</a><ul style="display: none;">
+<li class="chapter" data-level="3.3.1" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#control-flow"><i class="fa fa-check"></i><b>3.3.1</b> Control Flow</a></li>
+<li class="chapter" data-level="3.3.2" data-path="data-and-programming.html"><a href="http://daviddalpiaz.github.io/appliedstats/data-and-programming.html#functions"><i class="fa fa-check"></i><b>3.3.2</b> Functions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="summarizing-data.html"><a href="http://daviddalpiaz.github.io/appliedstats/summarizing-data.html"><i class="fa fa-check"></i><b>4</b> Summarizing Data</a><ul style="display: none;">
+<li class="chapter" data-level="4.1" data-path="summarizing-data.html"><a href="http://daviddalpiaz.github.io/appliedstats/summarizing-data.html#summary-statistics"><i class="fa fa-check"></i><b>4.1</b> Summary Statistics</a><ul style="display: none;">
+<li class="chapter" data-level="" data-path="summarizing-data.html"><a href="http://daviddalpiaz.github.io/appliedstats/summarizing-data.html#central-tendency"><i class="fa fa-check"></i>Central Tendency</a></li>
+<li class="chapter" data-level="" data-path="summarizing-data.html"><a href="http://daviddalpiaz.github.io/appliedstats/summarizing-data.html#spread"><i class="fa fa-check"></i>Spread</a></li>
+<li class="chapter" data-level="" data-path="summarizing-data.html"><a href="http://daviddalpiaz.github.io/appliedstats/summarizing-data.html#categorical"><i class="fa fa-check"></i>Categorical</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="summarizing-data.html"><a href="http://daviddalpiaz.github.io/appliedstats/summarizing-data.html#plotting"><i class="fa fa-check"></i><b>4.2</b> Plotting</a><ul style="display: none;">
+<li class="chapter" data-level="4.2.1" data-path="summarizing-data.html"><a href="http://daviddalpiaz.github.io/appliedstats/summarizing-data.html#histograms"><i class="fa fa-check"></i><b>4.2.1</b> Histograms</a></li>
+<li class="chapter" data-level="4.2.2" data-path="summarizing-data.html"><a href="http://daviddalpiaz.github.io/appliedstats/summarizing-data.html#barplots"><i class="fa fa-check"></i><b>4.2.2</b> Barplots</a></li>
+<li class="chapter" data-level="4.2.3" data-path="summarizing-data.html"><a href="http://daviddalpiaz.github.io/appliedstats/summarizing-data.html#boxplots"><i class="fa fa-check"></i><b>4.2.3</b> Boxplots</a></li>
+<li class="chapter" data-level="4.2.4" data-path="summarizing-data.html"><a href="http://daviddalpiaz.github.io/appliedstats/summarizing-data.html#scatterplots"><i class="fa fa-check"></i><b>4.2.4</b> Scatterplots</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="probability-and-statistics-in-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/probability-and-statistics-in-r.html"><i class="fa fa-check"></i><b>5</b> Probability and Statistics in <code>R</code></a><ul style="display: none;">
+<li class="chapter" data-level="5.1" data-path="probability-and-statistics-in-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/probability-and-statistics-in-r.html#probability-in-r"><i class="fa fa-check"></i><b>5.1</b> Probability in <code>R</code></a><ul style="display: none;">
+<li class="chapter" data-level="5.1.1" data-path="probability-and-statistics-in-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/probability-and-statistics-in-r.html#distributions"><i class="fa fa-check"></i><b>5.1.1</b> Distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="probability-and-statistics-in-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/probability-and-statistics-in-r.html#hypothesis-tests-in-r"><i class="fa fa-check"></i><b>5.2</b> Hypothesis Tests in <code>R</code></a><ul style="display: none;">
+<li class="chapter" data-level="5.2.1" data-path="probability-and-statistics-in-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/probability-and-statistics-in-r.html#one-sample-t-test-review"><i class="fa fa-check"></i><b>5.2.1</b> One Sample t-Test: Review</a></li>
+<li class="chapter" data-level="5.2.2" data-path="probability-and-statistics-in-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/probability-and-statistics-in-r.html#one-sample-t-test-example"><i class="fa fa-check"></i><b>5.2.2</b> One Sample t-Test: Example</a></li>
+<li class="chapter" data-level="5.2.3" data-path="probability-and-statistics-in-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/probability-and-statistics-in-r.html#two-sample-t-test-review"><i class="fa fa-check"></i><b>5.2.3</b> Two Sample t-Test: Review</a></li>
+<li class="chapter" data-level="5.2.4" data-path="probability-and-statistics-in-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/probability-and-statistics-in-r.html#two-sample-t-test-example"><i class="fa fa-check"></i><b>5.2.4</b> Two Sample t-Test: Example</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="probability-and-statistics-in-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/probability-and-statistics-in-r.html#simulation"><i class="fa fa-check"></i><b>5.3</b> Simulation</a><ul style="display: none;">
+<li class="chapter" data-level="5.3.1" data-path="probability-and-statistics-in-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/probability-and-statistics-in-r.html#paired-differences"><i class="fa fa-check"></i><b>5.3.1</b> Paired Differences</a></li>
+<li class="chapter" data-level="5.3.2" data-path="probability-and-statistics-in-r.html"><a href="http://daviddalpiaz.github.io/appliedstats/probability-and-statistics-in-r.html#distribution-of-a-sample-mean"><i class="fa fa-check"></i><b>5.3.2</b> Distribution of a Sample Mean</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="r-resources.html"><a href="http://daviddalpiaz.github.io/appliedstats/r-resources.html"><i class="fa fa-check"></i><b>6</b> <code>R</code> Resources</a><ul style="display: none;">
+<li class="chapter" data-level="6.1" data-path="r-resources.html"><a href="http://daviddalpiaz.github.io/appliedstats/r-resources.html#beginner-tutorials-and-references"><i class="fa fa-check"></i><b>6.1</b> Beginner Tutorials and References</a></li>
+<li class="chapter" data-level="6.2" data-path="r-resources.html"><a href="http://daviddalpiaz.github.io/appliedstats/r-resources.html#intermediate-references"><i class="fa fa-check"></i><b>6.2</b> Intermediate References</a></li>
+<li class="chapter" data-level="6.3" data-path="r-resources.html"><a href="http://daviddalpiaz.github.io/appliedstats/r-resources.html#advanced-references"><i class="fa fa-check"></i><b>6.3</b> Advanced References</a></li>
+<li class="chapter" data-level="6.4" data-path="r-resources.html"><a href="http://daviddalpiaz.github.io/appliedstats/r-resources.html#quick-comparisons-to-other-languages"><i class="fa fa-check"></i><b>6.4</b> Quick Comparisons to Other Languages</a></li>
+<li class="chapter" data-level="6.5" data-path="r-resources.html"><a href="http://daviddalpiaz.github.io/appliedstats/r-resources.html#rstudio-and-rmarkdown-videos"><i class="fa fa-check"></i><b>6.5</b> RStudio and RMarkdown Videos</a></li>
+<li class="chapter" data-level="6.6" data-path="r-resources.html"><a href="http://daviddalpiaz.github.io/appliedstats/r-resources.html#rmarkdown-template"><i class="fa fa-check"></i><b>6.6</b> RMarkdown Template</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html"><i class="fa fa-check"></i><b>7</b> Simple Linear Regression</a><ul style="display: none;">
+<li class="chapter" data-level="7.1" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#modeling"><i class="fa fa-check"></i><b>7.1</b> Modeling</a><ul style="display: none;">
+<li class="chapter" data-level="7.1.1" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#simple-linear-regression-model"><i class="fa fa-check"></i><b>7.1.1</b> Simple Linear Regression Model</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#least-squares-approach"><i class="fa fa-check"></i><b>7.2</b> Least Squares Approach</a><ul style="display: none;">
+<li class="chapter" data-level="7.2.1" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#making-predictions"><i class="fa fa-check"></i><b>7.2.1</b> Making Predictions</a></li>
+<li class="chapter" data-level="7.2.2" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#residuals"><i class="fa fa-check"></i><b>7.2.2</b> Residuals</a></li>
+<li class="chapter" data-level="7.2.3" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#variance-estimation"><i class="fa fa-check"></i><b>7.2.3</b> Variance Estimation</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#decomposition-of-variation"><i class="fa fa-check"></i><b>7.3</b> Decomposition of Variation</a><ul style="display: none;">
+<li class="chapter" data-level="7.3.1" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#coefficient-of-determination"><i class="fa fa-check"></i><b>7.3.1</b> Coefficient of Determination</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#the-lm-function"><i class="fa fa-check"></i><b>7.4</b> The <code>lm</code> Function</a></li>
+<li class="chapter" data-level="7.5" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#maximum-likelihood-estimation-mle-approach"><i class="fa fa-check"></i><b>7.5</b> Maximum Likelihood Estimation (MLE) Approach</a></li>
+<li class="chapter" data-level="7.6" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#simulating-slr"><i class="fa fa-check"></i><b>7.6</b> Simulating SLR</a></li>
+<li class="chapter" data-level="7.7" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#history"><i class="fa fa-check"></i><b>7.7</b> History</a></li>
+<li class="chapter" data-level="7.8" data-path="simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/simple-linear-regression.html#r-markdown"><i class="fa fa-check"></i><b>7.8</b> <code>R</code> Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html"><i class="fa fa-check"></i><b>8</b> Inference for Simple Linear Regression</a><ul style="display: none;">
+<li class="chapter" data-level="8.1" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#gaussmarkov-theorem"><i class="fa fa-check"></i><b>8.1</b> Gauss–Markov Theorem</a></li>
+<li class="chapter" data-level="8.2" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#sampling-distributions"><i class="fa fa-check"></i><b>8.2</b> Sampling Distributions</a><ul style="display: none;">
+<li class="chapter" data-level="8.2.1" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#simulating-sampling-distributions"><i class="fa fa-check"></i><b>8.2.1</b> Simulating Sampling Distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#standard-errors"><i class="fa fa-check"></i><b>8.3</b> Standard Errors</a></li>
+<li class="chapter" data-level="8.4" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#confidence-intervals-for-slope-and-intercept"><i class="fa fa-check"></i><b>8.4</b> Confidence Intervals for Slope and Intercept</a></li>
+<li class="chapter" data-level="8.5" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#hypothesis-tests"><i class="fa fa-check"></i><b>8.5</b> Hypothesis Tests</a></li>
+<li class="chapter" data-level="8.6" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#cars-example"><i class="fa fa-check"></i><b>8.6</b> <code>cars</code> Example</a><ul style="display: none;">
+<li class="chapter" data-level="8.6.1" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#tests-in-r"><i class="fa fa-check"></i><b>8.6.1</b> Tests in <code>R</code></a></li>
+<li class="chapter" data-level="8.6.2" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#significance-of-regression-t-test"><i class="fa fa-check"></i><b>8.6.2</b> Significance of Regression, t-Test</a></li>
+<li class="chapter" data-level="8.6.3" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#confidence-intervals-in-r"><i class="fa fa-check"></i><b>8.6.3</b> Confidence Intervals in <code>R</code></a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#confidence-interval-for-mean-response"><i class="fa fa-check"></i><b>8.7</b> Confidence Interval for Mean Response</a></li>
+<li class="chapter" data-level="8.8" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#prediction-interval-for-new-observations"><i class="fa fa-check"></i><b>8.8</b> Prediction Interval for New Observations</a></li>
+<li class="chapter" data-level="8.9" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#confidence-and-prediction-bands"><i class="fa fa-check"></i><b>8.9</b> Confidence and Prediction Bands</a></li>
+<li class="chapter" data-level="8.10" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#significance-of-regression-f-test"><i class="fa fa-check"></i><b>8.10</b> Significance of Regression, F-Test</a></li>
+<li class="chapter" data-level="8.11" data-path="inference-for-simple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/inference-for-simple-linear-regression.html#r-markdown-1"><i class="fa fa-check"></i><b>8.11</b> <code>R</code> Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="multiple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/multiple-linear-regression.html"><i class="fa fa-check"></i><b>9</b> Multiple Linear Regression</a><ul style="display: none;">
+<li class="chapter" data-level="9.1" data-path="multiple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/multiple-linear-regression.html#matrix-approach-to-regression"><i class="fa fa-check"></i><b>9.1</b> Matrix Approach to Regression</a></li>
+<li class="chapter" data-level="9.2" data-path="multiple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/multiple-linear-regression.html#sampling-distribution"><i class="fa fa-check"></i><b>9.2</b> Sampling Distribution</a><ul style="display: none;">
+<li class="chapter" data-level="9.2.1" data-path="multiple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/multiple-linear-regression.html#single-parameter-tests"><i class="fa fa-check"></i><b>9.2.1</b> Single Parameter Tests</a></li>
+<li class="chapter" data-level="9.2.2" data-path="multiple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/multiple-linear-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>9.2.2</b> Confidence Intervals</a></li>
+<li class="chapter" data-level="9.2.3" data-path="multiple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/multiple-linear-regression.html#confidence-intervals-for-mean-response"><i class="fa fa-check"></i><b>9.2.3</b> Confidence Intervals for Mean Response</a></li>
+<li class="chapter" data-level="9.2.4" data-path="multiple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/multiple-linear-regression.html#prediction-intervals"><i class="fa fa-check"></i><b>9.2.4</b> Prediction Intervals</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="multiple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/multiple-linear-regression.html#significance-of-regression"><i class="fa fa-check"></i><b>9.3</b> Significance of Regression</a></li>
+<li class="chapter" data-level="9.4" data-path="multiple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/multiple-linear-regression.html#nested-models"><i class="fa fa-check"></i><b>9.4</b> Nested Models</a></li>
+<li class="chapter" data-level="9.5" data-path="multiple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/multiple-linear-regression.html#simulation-1"><i class="fa fa-check"></i><b>9.5</b> Simulation</a></li>
+<li class="chapter" data-level="9.6" data-path="multiple-linear-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/multiple-linear-regression.html#r-markdown-2"><i class="fa fa-check"></i><b>9.6</b> <code>R</code> Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-building.html"><i class="fa fa-check"></i><b>10</b> Model Building</a><ul style="display: none;">
+<li class="chapter" data-level="10.1" data-path="model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-building.html#family-form-and-fit"><i class="fa fa-check"></i><b>10.1</b> Family, Form, and Fit</a><ul style="display: none;">
+<li class="chapter" data-level="10.1.1" data-path="model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-building.html#fit"><i class="fa fa-check"></i><b>10.1.1</b> Fit</a></li>
+<li class="chapter" data-level="10.1.2" data-path="model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-building.html#form"><i class="fa fa-check"></i><b>10.1.2</b> Form</a></li>
+<li class="chapter" data-level="10.1.3" data-path="model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-building.html#family"><i class="fa fa-check"></i><b>10.1.3</b> Family</a></li>
+<li class="chapter" data-level="10.1.4" data-path="model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-building.html#assumed-model-fitted-model"><i class="fa fa-check"></i><b>10.1.4</b> Assumed Model, Fitted Model</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-building.html#explanation-versus-prediction"><i class="fa fa-check"></i><b>10.2</b> Explanation versus Prediction</a><ul style="display: none;">
+<li class="chapter" data-level="10.2.1" data-path="model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-building.html#explanation"><i class="fa fa-check"></i><b>10.2.1</b> Explanation</a></li>
+<li class="chapter" data-level="10.2.2" data-path="model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-building.html#prediction"><i class="fa fa-check"></i><b>10.2.2</b> Prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-building.html#summary"><i class="fa fa-check"></i><b>10.3</b> Summary</a></li>
+<li class="chapter" data-level="10.4" data-path="model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-building.html#r-markdown-3"><i class="fa fa-check"></i><b>10.4</b> <code>R</code> Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="categorical-predictors-and-interactions.html"><a href="http://daviddalpiaz.github.io/appliedstats/categorical-predictors-and-interactions.html"><i class="fa fa-check"></i><b>11</b> Categorical Predictors and Interactions</a><ul style="display: none;">
+<li class="chapter" data-level="11.1" data-path="categorical-predictors-and-interactions.html"><a href="http://daviddalpiaz.github.io/appliedstats/categorical-predictors-and-interactions.html#dummy-variables"><i class="fa fa-check"></i><b>11.1</b> Dummy Variables</a></li>
+<li class="chapter" data-level="11.2" data-path="categorical-predictors-and-interactions.html"><a href="http://daviddalpiaz.github.io/appliedstats/categorical-predictors-and-interactions.html#interactions"><i class="fa fa-check"></i><b>11.2</b> Interactions</a></li>
+<li class="chapter" data-level="11.3" data-path="categorical-predictors-and-interactions.html"><a href="http://daviddalpiaz.github.io/appliedstats/categorical-predictors-and-interactions.html#factor-variables"><i class="fa fa-check"></i><b>11.3</b> Factor Variables</a><ul style="display: none;">
+<li class="chapter" data-level="11.3.1" data-path="categorical-predictors-and-interactions.html"><a href="http://daviddalpiaz.github.io/appliedstats/categorical-predictors-and-interactions.html#factors-with-more-than-two-levels"><i class="fa fa-check"></i><b>11.3.1</b> Factors with More Than Two Levels</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="categorical-predictors-and-interactions.html"><a href="http://daviddalpiaz.github.io/appliedstats/categorical-predictors-and-interactions.html#parameterization"><i class="fa fa-check"></i><b>11.4</b> Parameterization</a></li>
+<li class="chapter" data-level="11.5" data-path="categorical-predictors-and-interactions.html"><a href="http://daviddalpiaz.github.io/appliedstats/categorical-predictors-and-interactions.html#building-larger-models"><i class="fa fa-check"></i><b>11.5</b> Building Larger Models</a></li>
+<li class="chapter" data-level="11.6" data-path="categorical-predictors-and-interactions.html"><a href="http://daviddalpiaz.github.io/appliedstats/categorical-predictors-and-interactions.html#r-markdown-4"><i class="fa fa-check"></i><b>11.6</b> <code>R</code> Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="analysis-of-variance.html"><a href="http://daviddalpiaz.github.io/appliedstats/analysis-of-variance.html"><i class="fa fa-check"></i><b>12</b> Analysis of Variance</a><ul style="display: none;">
+<li class="chapter" data-level="12.1" data-path="analysis-of-variance.html"><a href="http://daviddalpiaz.github.io/appliedstats/analysis-of-variance.html#experiments"><i class="fa fa-check"></i><b>12.1</b> Experiments</a></li>
+<li class="chapter" data-level="12.2" data-path="analysis-of-variance.html"><a href="http://daviddalpiaz.github.io/appliedstats/analysis-of-variance.html#two-sample-t-test"><i class="fa fa-check"></i><b>12.2</b> Two-Sample t-Test</a></li>
+<li class="chapter" data-level="12.3" data-path="analysis-of-variance.html"><a href="http://daviddalpiaz.github.io/appliedstats/analysis-of-variance.html#one-way-anova"><i class="fa fa-check"></i><b>12.3</b> One-Way ANOVA</a><ul style="display: none;">
+<li class="chapter" data-level="12.3.1" data-path="analysis-of-variance.html"><a href="http://daviddalpiaz.github.io/appliedstats/analysis-of-variance.html#factor-variables-1"><i class="fa fa-check"></i><b>12.3.1</b> Factor Variables</a></li>
+<li class="chapter" data-level="12.3.2" data-path="analysis-of-variance.html"><a href="http://daviddalpiaz.github.io/appliedstats/analysis-of-variance.html#some-simulation"><i class="fa fa-check"></i><b>12.3.2</b> Some Simulation</a></li>
+<li class="chapter" data-level="12.3.3" data-path="analysis-of-variance.html"><a href="http://daviddalpiaz.github.io/appliedstats/analysis-of-variance.html#power"><i class="fa fa-check"></i><b>12.3.3</b> Power</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="analysis-of-variance.html"><a href="http://daviddalpiaz.github.io/appliedstats/analysis-of-variance.html#post-hoc-testing"><i class="fa fa-check"></i><b>12.4</b> Post Hoc Testing</a></li>
+<li class="chapter" data-level="12.5" data-path="analysis-of-variance.html"><a href="http://daviddalpiaz.github.io/appliedstats/analysis-of-variance.html#two-way-anova"><i class="fa fa-check"></i><b>12.5</b> Two-Way ANOVA</a></li>
+<li class="chapter" data-level="12.6" data-path="analysis-of-variance.html"><a href="http://daviddalpiaz.github.io/appliedstats/analysis-of-variance.html#r-markdown-5"><i class="fa fa-check"></i><b>12.6</b> <code>R</code> Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html"><i class="fa fa-check"></i><b>13</b> Model Diagnostics</a><ul style="display: none;">
+<li class="chapter" data-level="13.1" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#model-assumptions"><i class="fa fa-check"></i><b>13.1</b> Model Assumptions</a></li>
+<li class="chapter" data-level="13.2" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#checking-assumptions"><i class="fa fa-check"></i><b>13.2</b> Checking Assumptions</a><ul style="display: none;">
+<li class="chapter" data-level="13.2.1" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#fitted-versus-residuals-plot"><i class="fa fa-check"></i><b>13.2.1</b> Fitted versus Residuals Plot</a></li>
+<li class="chapter" data-level="13.2.2" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#breusch-pagan-test"><i class="fa fa-check"></i><b>13.2.2</b> Breusch-Pagan Test</a></li>
+<li class="chapter" data-level="13.2.3" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#histograms-1"><i class="fa fa-check"></i><b>13.2.3</b> Histograms</a></li>
+<li class="chapter" data-level="13.2.4" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#q-q-plots"><i class="fa fa-check"></i><b>13.2.4</b> Q-Q Plots</a></li>
+<li class="chapter" data-level="13.2.5" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#shapiro-wilk-test"><i class="fa fa-check"></i><b>13.2.5</b> Shapiro-Wilk Test</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#unusual-observations"><i class="fa fa-check"></i><b>13.3</b> Unusual Observations</a><ul style="display: none;">
+<li class="chapter" data-level="13.3.1" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#leverage"><i class="fa fa-check"></i><b>13.3.1</b> Leverage</a></li>
+<li class="chapter" data-level="13.3.2" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#outliers"><i class="fa fa-check"></i><b>13.3.2</b> Outliers</a></li>
+<li class="chapter" data-level="13.3.3" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#influence"><i class="fa fa-check"></i><b>13.3.3</b> Influence</a></li>
+</ul></li>
+<li class="chapter" data-level="13.4" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#data-analysis-examples"><i class="fa fa-check"></i><b>13.4</b> Data Analysis Examples</a><ul style="display: none;">
+<li class="chapter" data-level="13.4.1" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#good-diagnostics"><i class="fa fa-check"></i><b>13.4.1</b> Good Diagnostics</a></li>
+<li class="chapter" data-level="13.4.2" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#suspect-diagnostics"><i class="fa fa-check"></i><b>13.4.2</b> Suspect Diagnostics</a></li>
+</ul></li>
+<li class="chapter" data-level="13.5" data-path="model-diagnostics.html"><a href="http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#r-markdown-6"><i class="fa fa-check"></i><b>13.5</b> <code>R</code> Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html"><i class="fa fa-check"></i><b>14</b> Transformations</a><ul style="display: none;">
+<li class="chapter" data-level="14.1" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#response-transformation"><i class="fa fa-check"></i><b>14.1</b> Response Transformation</a><ul style="display: none;">
+<li class="chapter" data-level="14.1.1" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#variance-stabilizing-transformations"><i class="fa fa-check"></i><b>14.1.1</b> Variance Stabilizing Transformations</a></li>
+<li class="chapter" data-level="14.1.2" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#box-cox-transformations"><i class="fa fa-check"></i><b>14.1.2</b> Box-Cox Transformations</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#predictor-transformation"><i class="fa fa-check"></i><b>14.2</b> Predictor Transformation</a><ul style="display: none;">
+<li class="chapter" data-level="14.2.1" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#polynomials"><i class="fa fa-check"></i><b>14.2.1</b> Polynomials</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#response-transformations"><i class="fa fa-check"></i>Response Transformations</a></li>
+<li class="chapter" data-level="" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#predictor-transformations"><i class="fa fa-check"></i>Predictor Transformations</a><ul style="display: none;">
+<li class="chapter" data-level="14.2.2" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#a-quadratic-model"><i class="fa fa-check"></i><b>14.2.2</b> A Quadratic Model</a></li>
+<li class="chapter" data-level="14.2.3" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#overfitting-and-extrapolation"><i class="fa fa-check"></i><b>14.2.3</b> Overfitting and Extrapolation</a></li>
+<li class="chapter" data-level="14.2.4" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#comparing-polynomial-models"><i class="fa fa-check"></i><b>14.2.4</b> Comparing Polynomial Models</a></li>
+<li class="chapter" data-level="14.2.5" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#poly-function-and-orthogonal-polynomials"><i class="fa fa-check"></i><b>14.2.5</b> <code>poly()</code> Function and Orthogonal Polynomials</a></li>
+<li class="chapter" data-level="14.2.6" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#inhibit-function"><i class="fa fa-check"></i><b>14.2.6</b> Inhibit Function</a></li>
+<li class="chapter" data-level="14.2.7" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#data-example"><i class="fa fa-check"></i><b>14.2.7</b> Data Example</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="transformations.html"><a href="http://daviddalpiaz.github.io/appliedstats/transformations.html#r-markdown-7"><i class="fa fa-check"></i><b>14.3</b> <code>R</code> Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="collinearity.html"><a href="http://daviddalpiaz.github.io/appliedstats/collinearity.html"><i class="fa fa-check"></i><b>15</b> Collinearity</a><ul style="display: none;">
+<li class="chapter" data-level="15.1" data-path="collinearity.html"><a href="http://daviddalpiaz.github.io/appliedstats/collinearity.html#exact-collinearity"><i class="fa fa-check"></i><b>15.1</b> Exact Collinearity</a></li>
+<li class="chapter" data-level="15.2" data-path="collinearity.html"><a href="http://daviddalpiaz.github.io/appliedstats/collinearity.html#collinearity-1"><i class="fa fa-check"></i><b>15.2</b> Collinearity</a><ul style="display: none;">
+<li class="chapter" data-level="15.2.1" data-path="collinearity.html"><a href="http://daviddalpiaz.github.io/appliedstats/collinearity.html#variance-inflation-factor."><i class="fa fa-check"></i><b>15.2.1</b> Variance Inflation Factor.</a></li>
+</ul></li>
+<li class="chapter" data-level="15.3" data-path="collinearity.html"><a href="http://daviddalpiaz.github.io/appliedstats/collinearity.html#simulation-2"><i class="fa fa-check"></i><b>15.3</b> Simulation</a></li>
+<li class="chapter" data-level="15.4" data-path="collinearity.html"><a href="http://daviddalpiaz.github.io/appliedstats/collinearity.html#r-markdown-8"><i class="fa fa-check"></i><b>15.4</b> <code>R</code> Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html"><i class="fa fa-check"></i><b>16</b> Variable Selection and Model Building</a><ul style="display: none;">
+<li class="chapter" data-level="16.1" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#quality-criterion"><i class="fa fa-check"></i><b>16.1</b> Quality Criterion</a><ul style="display: none;">
+<li class="chapter" data-level="16.1.1" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#akaike-information-criterion"><i class="fa fa-check"></i><b>16.1.1</b> Akaike Information Criterion</a></li>
+<li class="chapter" data-level="16.1.2" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#bayesian-information-criterion"><i class="fa fa-check"></i><b>16.1.2</b> Bayesian Information Criterion</a></li>
+<li class="chapter" data-level="16.1.3" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#adjusted-r-squared"><i class="fa fa-check"></i><b>16.1.3</b> Adjusted R-Squared</a></li>
+<li class="chapter" data-level="16.1.4" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#cross-validated-rmse"><i class="fa fa-check"></i><b>16.1.4</b> Cross-Validated RMSE</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#selection-procedures"><i class="fa fa-check"></i><b>16.2</b> Selection Procedures</a><ul style="display: none;">
+<li class="chapter" data-level="16.2.1" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#backward-search"><i class="fa fa-check"></i><b>16.2.1</b> Backward Search</a></li>
+<li class="chapter" data-level="16.2.2" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#forward-search"><i class="fa fa-check"></i><b>16.2.2</b> Forward Search</a></li>
+<li class="chapter" data-level="16.2.3" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#stepwise-search"><i class="fa fa-check"></i><b>16.2.3</b> Stepwise Search</a></li>
+<li class="chapter" data-level="16.2.4" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#exhaustive-search"><i class="fa fa-check"></i><b>16.2.4</b> Exhaustive Search</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#higher-order-terms"><i class="fa fa-check"></i><b>16.3</b> Higher Order Terms</a></li>
+<li class="chapter" data-level="16.4" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#explanation-versus-prediction-1"><i class="fa fa-check"></i><b>16.4</b> Explanation versus Prediction</a><ul style="display: none;">
+<li class="chapter" data-level="16.4.1" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#explanation-1"><i class="fa fa-check"></i><b>16.4.1</b> Explanation</a></li>
+<li class="chapter" data-level="16.4.2" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#prediction-1"><i class="fa fa-check"></i><b>16.4.2</b> Prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="16.5" data-path="variable-selection-and-model-building.html"><a href="http://daviddalpiaz.github.io/appliedstats/variable-selection-and-model-building.html#r-markdown-9"><i class="fa fa-check"></i><b>16.5</b> <code>R</code> Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html"><i class="fa fa-check"></i><b>17</b> Logistic Regression</a><ul style="display: none;">
+<li class="chapter" data-level="17.1" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#generalized-linear-models"><i class="fa fa-check"></i><b>17.1</b> Generalized Linear Models</a></li>
+<li class="chapter" data-level="17.2" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#binary-response"><i class="fa fa-check"></i><b>17.2</b> Binary Response</a><ul style="display: none;">
+<li class="chapter" data-level="17.2.1" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#fitting-logistic-regression"><i class="fa fa-check"></i><b>17.2.1</b> Fitting Logistic Regression</a></li>
+<li class="chapter" data-level="17.2.2" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#fitting-issues"><i class="fa fa-check"></i><b>17.2.2</b> Fitting Issues</a></li>
+<li class="chapter" data-level="17.2.3" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#simulation-examples"><i class="fa fa-check"></i><b>17.2.3</b> Simulation Examples</a></li>
+</ul></li>
+<li class="chapter" data-level="17.3" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#working-with-logistic-regression"><i class="fa fa-check"></i><b>17.3</b> Working with Logistic Regression</a><ul style="display: none;">
+<li class="chapter" data-level="17.3.1" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#testing-with-glms"><i class="fa fa-check"></i><b>17.3.1</b> Testing with GLMs</a></li>
+<li class="chapter" data-level="17.3.2" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#wald-test"><i class="fa fa-check"></i><b>17.3.2</b> Wald Test</a></li>
+<li class="chapter" data-level="17.3.3" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#likelihood-ratio-test"><i class="fa fa-check"></i><b>17.3.3</b> Likelihood-Ratio Test</a></li>
+<li class="chapter" data-level="17.3.4" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#saheart-example"><i class="fa fa-check"></i><b>17.3.4</b> <code>SAheart</code> Example</a></li>
+<li class="chapter" data-level="17.3.5" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#confidence-intervals-1"><i class="fa fa-check"></i><b>17.3.5</b> Confidence Intervals</a></li>
+<li class="chapter" data-level="17.3.6" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#confidence-intervals-for-mean-response-1"><i class="fa fa-check"></i><b>17.3.6</b> Confidence Intervals for Mean Response</a></li>
+<li class="chapter" data-level="17.3.7" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#formula-syntax"><i class="fa fa-check"></i><b>17.3.7</b> Formula Syntax</a></li>
+<li class="chapter" data-level="17.3.8" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#deviance"><i class="fa fa-check"></i><b>17.3.8</b> Deviance</a></li>
+</ul></li>
+<li class="chapter" data-level="17.4" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#classification"><i class="fa fa-check"></i><b>17.4</b> Classification</a><ul style="display: none;">
+<li class="chapter" data-level="17.4.1" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#spam-example"><i class="fa fa-check"></i><b>17.4.1</b> <code>spam</code> Example</a></li>
+<li class="chapter" data-level="17.4.2" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#evaluating-classifiers"><i class="fa fa-check"></i><b>17.4.2</b> Evaluating Classifiers</a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="logistic-regression.html"><a href="http://daviddalpiaz.github.io/appliedstats/logistic-regression.html#r-markdown-10"><i class="fa fa-check"></i><b>17.5</b> <code>R</code> Markdown</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html"><i class="fa fa-check"></i><b>18</b> Beyond</a><ul style="display: none;">
+<li class="chapter" data-level="18.1" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#whats-next"><i class="fa fa-check"></i><b>18.1</b> What’s Next</a></li>
+<li class="chapter" data-level="18.2" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#rstudio"><i class="fa fa-check"></i><b>18.2</b> RStudio</a></li>
+<li class="chapter" data-level="18.3" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#tidy-data"><i class="fa fa-check"></i><b>18.3</b> Tidy Data</a></li>
+<li class="chapter" data-level="18.4" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#visualization"><i class="fa fa-check"></i><b>18.4</b> Visualization</a></li>
+<li class="chapter" data-level="18.5" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#web-applications"><i class="fa fa-check"></i><b>18.5</b> Web Applications</a></li>
+<li class="chapter" data-level="18.6" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#experimental-design"><i class="fa fa-check"></i><b>18.6</b> Experimental Design</a></li>
+<li class="chapter" data-level="18.7" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#machine-learning"><i class="fa fa-check"></i><b>18.7</b> Machine Learning</a><ul style="display: none;">
+<li class="chapter" data-level="18.7.1" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#deep-learning"><i class="fa fa-check"></i><b>18.7.1</b> Deep Learning</a></li>
+</ul></li>
+<li class="chapter" data-level="18.8" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#time-series"><i class="fa fa-check"></i><b>18.8</b> Time Series</a></li>
+<li class="chapter" data-level="18.9" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#bayesianism"><i class="fa fa-check"></i><b>18.9</b> Bayesianism</a></li>
+<li class="chapter" data-level="18.10" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#high-performance-computing"><i class="fa fa-check"></i><b>18.10</b> High Performance Computing</a></li>
+<li class="chapter" data-level="18.11" data-path="beyond.html"><a href="http://daviddalpiaz.github.io/appliedstats/beyond.html#further-r-resources"><i class="fa fa-check"></i><b>18.11</b> Further <code>R</code> Resources</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="appendix.html"><a href="http://daviddalpiaz.github.io/appliedstats/appendix.html"><i class="fa fa-check"></i><b>19</b> Appendix</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/daviddalpiaz/appliedstats" target="blank">© 2016 - 2021 David Dalpiaz</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body fixed">
+      <div class="body-inner">
+        <div class="book-header fixed" role="navigation" style="background-color: rgb(255, 255, 255);">
+          <a class="btn pull-left js-toolbar-action" aria-label="Toggle Sidebar" title="Toggle Sidebar" href="http://daviddalpiaz.github.io/appliedstats/#"><i class="fa fa-align-justify"></i></a><a class="btn pull-left js-toolbar-action" aria-label="Search" title="Search" href="http://daviddalpiaz.github.io/appliedstats/#"><i class="fa fa-search"></i></a><div class="dropdown pull-right  js-toolbar-action"><a class="btn toggle-dropdown" aria-label="Share" title="Share" href="http://daviddalpiaz.github.io/appliedstats/#"><i class="fa fa-share-alt"></i></a><div class="dropdown-menu dropdown-left"><div class="dropdown-caret"><span class="caret-outer"></span><span class="caret-inner"></span></div><div class="buttons"><button class="button size-5 ">Facebook</button><button class="button size-5 ">Twitter</button><button class="button size-5 ">LinkedIn</button><button class="button size-5 ">Weibo</button><button class="button size-5 ">Instapaper</button></div></div></div><a class="btn pull-right js-toolbar-action" aria-label="Facebook" title="Facebook" href="http://daviddalpiaz.github.io/appliedstats/#"><i class="fa fa-facebook"></i></a><a class="btn pull-right js-toolbar-action" aria-label="Twitter" title="Twitter" href="http://daviddalpiaz.github.io/appliedstats/#"><i class="fa fa-twitter"></i></a><div class="dropdown pull-left font-settings js-toolbar-action"><a class="btn toggle-dropdown" aria-label="Font Settings" title="Font Settings" href="http://daviddalpiaz.github.io/appliedstats/#"><i class="fa fa-font"></i></a><div class="dropdown-menu dropdown-right"><div class="dropdown-caret"><span class="caret-outer"></span><span class="caret-inner"></span></div><div class="buttons"><button class="button size-2 font-reduce">A</button><button class="button size-2 font-enlarge">A</button></div><div class="buttons"><button class="button size-2 ">Serif</button><button class="button size-2 ">Sans</button></div><div class="buttons"><button class="button size-3 ">White</button><button class="button size-3 ">Sepia</button><button class="button size-3 ">Night</button></div></div></div><a class="btn pull-left js-toolbar-action" aria-label="Edit" title="Edit" href="http://daviddalpiaz.github.io/appliedstats/#"><i class="fa fa-edit"></i></a><a class="btn pull-left js-toolbar-action" aria-label="PDF" title="PDF" href="http://daviddalpiaz.github.io/appliedstats/#"><i class="fa fa-file-pdf-o"></i></a><a class="btn pull-left js-toolbar-action" aria-label="Information about the toolbar" title="Information about the toolbar" href="http://daviddalpiaz.github.io/appliedstats/#"><i class="fa fa-info"></i></a><h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="http://daviddalpiaz.github.io/appliedstats/">Applied Statistics with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Applied Statistics with R</h1>
+<p class="date" style="margin-top: 1.5em;"><em>2021-06-11</em></p>
+</div>
+<div id="introduction" class="section level1">
+<h1 class="hasAnchor"><span class="header-section-number">Chapter 1</span> Introduction<a href="http://daviddalpiaz.github.io/appliedstats/#introduction" class="anchor-section"></a></h1>
+<p>Welcome to Applied Statistics with R!</p>
+<div id="about-this-book" class="section level2">
+<h2 class="hasAnchor"><span class="header-section-number">1.1</span> About This Book<a href="http://daviddalpiaz.github.io/appliedstats/#about-this-book" class="anchor-section"></a></h2>
+<p>This book was originally (and currently) designed for use with <strong>STAT 420</strong>, <em>Methods of Applied Statistics</em>, at the University of Illinois at Urbana-Champaign. It may certainly be used elsewhere, but any references to “this course” in this book specifically refer to STAT 420.</p>
+<p>This book is under active development. When possible, it would be best to always access the text online to be sure you are using the most up-to-date version. Also, the html version provides additional features such as changing text size, font, and colors. If you are in need of a local copy, a <a href="http://daviddalpiaz.github.io/appliedstats/applied_statistics.pdf" target="_blank"><strong>pdf version</strong> is continuously maintained</a>, however, because a pdf uses pages, the formatting may not be as functional. (In other words, the author needs to go back and spend some time working on the pdf formatting.)</p>
+<p>Since this book is under active development you may encounter errors ranging from typos, to broken code, to poorly explained topics. If you do, please let us know! Simply send an email and we will make the changes as soon as possible. (<code>dalpiaz2 AT illinois DOT edu</code>) Or, if you know RMarkdown and are familiar with GitHub, <a href="https://github.com/daviddalpiaz/appliedstats" target="_blank">make a pull request and fix an issue yourself!</a> This process is partially automated by the edit button in the top-left corner of the html version. If your suggestion or fix becomes part of the book, you will be added to the list at the end of this chapter. We’ll also link to your GitHub account, or personal website upon request.</p>
+<p>This text uses <a href="https://www.mathjax.org/" target="_blank">MathJax</a> to render mathematical notation for the web. Occasionally, but rarely, a JavaScript error will prevent MathJax from rendering correctly. In this case, you will see the “code” instead of the expected mathematical equations. From experience, this is almost always fixed by simply refreshing the page. You’ll also notice that if you right-click any equation you can obtain the MathML Code (for copying into Microsoft Word) or the TeX command used to generate the equation.</p>
+<p><span class="math display"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="mjx-chtml MJXc-display" style="text-align: center;"><span id="MathJax-Element-1-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" style="font-size: 117%; text-align: center; position: relative;" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;msup&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;msup&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;msup&gt;&lt;mi&gt;c&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;/math&gt;" role="presentation"><span id="MJXc-Node-1" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-2" class="mjx-mrow"><span id="MJXc-Node-3" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-4" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.216em; padding-bottom: 0.27em;">a</span></span></span><span class="mjx-sup" style="font-size: 70.7%; vertical-align: 0.584em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-5" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.377em; padding-bottom: 0.323em;">2</span></span></span></span><span id="MJXc-Node-6" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.323em; padding-bottom: 0.43em;">+</span></span><span id="MJXc-Node-7" class="mjx-msubsup MJXc-space2"><span class="mjx-base"><span id="MJXc-Node-8" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.27em;">b</span></span></span><span class="mjx-sup" style="font-size: 70.7%; vertical-align: 0.584em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-9" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.377em; padding-bottom: 0.323em;">2</span></span></span></span><span id="MJXc-Node-10" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.056em; padding-bottom: 0.323em;">=</span></span><span id="MJXc-Node-11" class="mjx-msubsup MJXc-space3"><span class="mjx-base"><span id="MJXc-Node-12" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.216em; padding-bottom: 0.27em;">c</span></span></span><span class="mjx-sup" style="font-size: 70.7%; vertical-align: 0.584em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-13" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.377em; padding-bottom: 0.323em;">2</span></span></span></span></span></span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msup><mi>a</mi><mn>2</mn></msup><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup><mo>=</mo><msup><mi>c</mi><mn>2</mn></msup></math></span></span></span><script type="math/tex; mode=display" id="MathJax-Element-1">
+a^2 + b^2 = c^2
+</script></span></p>
+</div>
+<div id="conventions" class="section level2">
+<h2 class="hasAnchor"><span class="header-section-number">1.2</span> Conventions<a href="http://daviddalpiaz.github.io/appliedstats/#conventions" class="anchor-section"></a></h2>
+<p><code>R</code> code will be typeset using a <code>monospace</code> font which is syntax highlighted.</p>
+<div class="sourceCode" id="cb1"><button type="button" class="copy-to-clipboard-button" title="Copy to clipboard" aria-label="Copy to clipboard"><i class="fa fa-copy"></i></button><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="http://daviddalpiaz.github.io/appliedstats/index.html#cb1-1" aria-hidden="true"></a>a =<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb1-2"><a href="http://daviddalpiaz.github.io/appliedstats/index.html#cb1-2" aria-hidden="true"></a>b =<span class="st"> </span><span class="dv">4</span></span>
+<span id="cb1-3"><a href="http://daviddalpiaz.github.io/appliedstats/index.html#cb1-3" aria-hidden="true"></a><span class="kw">sqrt</span>(a <span class="op">^</span><span class="st"> </span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>b <span class="op">^</span><span class="st"> </span><span class="dv">2</span>)</span></code></pre></div>
+<p><code>R</code> output lines, which would appear in the console will begin with <code>##</code>. They will generally not be syntax highlighted.</p>
+<pre><code>## [1] 5</code></pre>
+<p>We use the quantity <span class="math inline"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-2-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="font-size: 117%; position: relative;"><span id="MJXc-Node-14" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-15" class="mjx-mrow"><span id="MJXc-Node-16" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.216em; padding-bottom: 0.483em;">p</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>p</mi></math></span></span><script type="math/tex" id="MathJax-Element-2">p</script></span> to refer to the number of <span class="math inline"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-3-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="font-size: 117%; position: relative;"><span id="MJXc-Node-17" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-18" class="mjx-mrow"><span id="MJXc-Node-19" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.483em; padding-bottom: 0.483em; padding-right: 0.007em;">β</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>β</mi></math></span></span><script type="math/tex" id="MathJax-Element-3">\beta</script></span> parameters in a linear model, <strong>not</strong> the number of predictors. Don’t worry if you don’t know what this means yet!</p>
+</div>
+<div id="acknowledgements" class="section level2">
+<h2 class="hasAnchor"><span class="header-section-number">1.3</span> Acknowledgements<a href="http://daviddalpiaz.github.io/appliedstats/#acknowledgements" class="anchor-section"></a></h2>
+<p>Material in this book was heavily influenced by:</p>
+<ul>
+<li><a href="https://stat.illinois.edu/directory/profile/stepanov">Alex Stepanov</a>
+<ul>
+<li>Longtime instructor of STAT 420 at the University of Illinois at Urbana-Champaign. The author of this book actually took Alex’s STAT 420 class many years ago! Alex provided or inspired many of the examples in the text.</li>
+</ul></li>
+<li><a href="http://publish.illinois.edu/dunger/" target="_blank">David Unger</a>
+<ul>
+<li>Another STAT 420 instructor at the University of Illinois at Urbana-Champaign. Co-taught with the author during the summer of 2016 while this book was first being developed. Provided endless hours of copy editing and countless suggestions.</li>
+</ul></li>
+<li><a href="http://www.thecoatlessprofessor.com/" target="_blank">James Balamuta</a>
+<ul>
+<li>Current graduate student at the University of Illinois at Urbana-Champaign. Provided the initial push to write this book by introducing the author to the <a href="https://bookdown.org/yihui/bookdown/" target="_blank"><code>bookdown</code></a> package in <code>R</code>. Also a frequent contributor via GitHub.</li>
+</ul></li>
+</ul>
+<p>Your name could be here! Suggest an edit! Correct a typo! If you submit a correction and would like to be listed below, please provide your name as you would like it to appear, as well as a link to a GitHub, LinkedIn, or personal website.</p>
+<ul>
+<li><a href="https://github.com/dmcquillan314" target="_blank">Daniel McQuillan</a></li>
+<li><a href="https://github.com/mruben09" target="_blank">Mason Rubenstein</a></li>
+<li><a href="https://github.com/yuhangwang" target="_blank">Yuhang Wang</a></li>
+<li>Zhao Liu</li>
+<li><a href="https://github.com/JinfengXiao" target="_blank">Jinfeng Xiao</a></li>
+<li><a href="https://www.linkedin.com/in/somupalaniappan" target="_blank">Somu Palaniappan</a></li>
+<li><a href="https://www.linkedin.com/in/michaelchan2newyork" target="_blank">Michael Hung-Yiu Chan</a></li>
+<li><a href="https://github.com/EloiseRosen" target="_blank">Eloise Rosen</a></li>
+<li><a href="https://www.linkedin.com/in/kiomars-nassiri-kahnamooee/" target="_blank">Kiomars Nassiri</a></li>
+<li><a href="https://github.com/jeffgerlach" target="_blank">Jeff Gerlach</a></li>
+<li><a href="https://github.com/linuxdream" target="_blank">Brandon Ching</a></li>
+<li><a href="https://github.com/rayfix" target="_blank">Ray Fix</a></li>
+<li><a href="https://github.com/tyler-thetyrant/" target="_blank">Tyler Kim</a></li>
+<li><a href="https://github.com/yeonghoey/" target="_blank">Yeongho Kim</a></li>
+<li><a href="https://github.com/langholz/" target="_blank">Elmar Langholz</a></li>
+<li><a href="https://www.linkedin.com/in/dnguyen5" target="_blank">Thai Duy Cuong Nguyen</a></li>
+<li><a href="https://github.com/junkim327" target="_blank">Junyoung Kim</a></li>
+<li><a href="https://www.linkedin.com/in/ksezgin" target="_blank">Sezgin Kucukcoban</a></li>
+<li><a href="https://www.linkedin.com/in/tony-ma-b978143a/" target="_blank">Tony Ma</a></li>
+<li><a href="https://www.linkedin.com/in/radumanolescu1/" target="_blank">Radu Manolescu</a></li>
+<li><a href="https://www.linkedin.com/in/dileep-pasumarthi-75a53345/" target="_blank">Dileep Pasumarthi</a></li>
+<li>Sihun Wang</li>
+<li><a href="https://github.com/greenfacts" target="_blank">Joseph Wilson</a></li>
+<li><a href="https://github.com/lin" target="_blank">Yingkui Lin</a></li>
+<li><a href="https://www.researchgate.net/profile/Andy_Siddall" target="_blank">Andy Siddall</a></li>
+<li><a href="https://github.com/nbalepur" target="_blank">Nishant Balepur</a></li>
+<li><a href="https://github.com/dkrovi2" target="_blank">Durga Krovi</a></li>
+<li><a href="https://www.rajkrishnan.dev/" target="_blank">Raj Krishnan</a></li>
+<li><a href="https://github.com/purecod3" target="_blank">Ed Pureza</a></li>
+</ul>
+</div>
+<div id="license" class="section level2">
+<h2 class="hasAnchor"><span class="header-section-number">1.4</span> License<a href="http://daviddalpiaz.github.io/appliedstats/#license" class="anchor-section"></a></h2>
+<div class="figure">
+<img src="./Applied Statistics with R_files/cc.png" alt="">
+<p class="caption">This work is licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="http://daviddalpiaz.github.io/appliedstats/introduction-to-r.html" class="navigation navigation-next navigation-unique" aria-label="Next page" style="margin-right: 17px;"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="./Applied Statistics with R_files/app.min.js.download"></script>
+<script src="./Applied Statistics with R_files/lunr.js.download"></script>
+<script src="./Applied Statistics with R_files/clipboard.min.js.download"></script>
+<script src="./Applied Statistics with R_files/plugin-search.js.download"></script>
+<script src="./Applied Statistics with R_files/plugin-sharing.js.download"></script>
+<script src="./Applied Statistics with R_files/plugin-fontsettings.js.download"></script>
+<script src="./Applied Statistics with R_files/plugin-bookdown.js.download"></script>
+<script src="./Applied Statistics with R_files/jquery.highlight.js.download"></script>
+<script src="./Applied Statistics with R_files/plugin-clipboard.js.download"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/daviddalpiaz/appliedstats/edit/master/index.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["applied_statistics.pdf"],
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+
+
+</body></html>

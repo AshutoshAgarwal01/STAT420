@@ -1,0 +1,161 @@
+---
+title: "Week9-Practice quiz"
+author: "Ashutosh Agarwal"
+date: "7/14/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+```{r}
+model = lm(mpg ~ ., data = mtcars)
+max(faraway::vif(model))
+```
+
+## Question 2
+
+```{r}
+# mtcars
+model = lm(mpg ~ ., data = mtcars)
+summary(model)$adj.r.squared
+```
+
+## Question 3
+
+```{r}
+model = lm(mpg ~ ., data = mtcars)
+err = resid(model)/ (1 - hatvalues(model))
+sqrt(mean(err^2))
+```
+
+## Question 4
+
+am. qsec, wt
+
+```{r}
+model = lm(mpg ~ ., data = mtcars)
+selected = step(model, direction = "backward", k = 2)
+```
+
+## Question 5
+
+```{r}
+model = lm(mpg ~ wt + qsec + am, data = mtcars)
+err = resid(model)/ (1 - hatvalues(model))
+sqrt(mean(err^2))
+```
+
+## Question 6
+
+```{r}
+model = lm(mpg ~ wt + qsec + am, data = mtcars)
+faraway::vif(model)
+max(faraway::vif(model))
+```
+
+## Question 7
+
+  - Selected model is better for predicting and does not have collinearity issues.
+  
+  - When we want to find a model which is better for predicting - we may choose a more complex model.
+  
+  - But in this case RMSE_LOOC for simple model is lower than complex one. That's why we are choosing simple (selected) one.
+  
+## Question 8
+
+wt, cyl
+```{r}
+# mtcars
+n = nrow(mtcars)
+model_start = lm(mpg ~ 1, data = mtcars)
+# step(model_start, scope = mpg ~ ., direction = "forward", k = log(n))
+step(model_start, scope = mpg ~ cyl + disp + hp + drat + wt + qsec + vs + am + gear + carb, direction = "forward", k = log(n))
+```
+
+## Question 9
+
+```{r}
+model = lm(mpg ~ wt + cyl, data = mtcars)
+err = resid(model)/ (1 - hatvalues(model))
+sqrt(mean(err^2))
+```
+
+## Question 10
+
+```{r}
+# LifeCycleSavings
+# Model predicting sr with all variables except ddpi
+model_sr = lm(sr ~ . - ddpi, data = LifeCycleSavings)
+
+# Model predicting ddpi with all other variables.
+model_ddpi = lm(ddpi ~ . - sr, data = LifeCycleSavings)
+
+# partial corr coeff
+# correlation between residuals of sr and ddpi using same set of predictors.
+cor(resid(model_ddpi), resid(model_sr))
+
+# Since value is big, we can say that including ddpi will be useful.
+# Is it because, this correlation implies that there is some relationship between ddpi and sr
+
+```
+
+## Question 11
+
+```{r}
+model = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+summary(model)$adj.r.squared
+```
+## Question 12
+
+pop15 + dpi + ddpi + dpi:ddpi
+
+But answer had only one of these dpi:ddpi
+
+```{r}
+n = nrow(LifeCycleSavings)
+model_start = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+step(model_start, direction = "backward", k = log(n))
+```
+
+## Question 13
+
+
+pop15 + dpi + ddpi + dpi:ddpi
+
+But answer only had dpi:ddpi
+```{r}
+model_start = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+step(model_start, direction = "backward", k = 2)
+```
+
+## Question 14
+
+```{r}
+looc = function(model){
+    err = resid(model)/ (1 - hatvalues(model))
+    sqrt(mean(err^2))
+}
+
+model_11 = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+model_13 = lm(sr ~ pop15 + dpi + ddpi + dpi:ddpi, data = LifeCycleSavings)
+model_all = lm(sr ~ ., data = LifeCycleSavings)
+
+min(looc(model_11), looc(model_13), looc(model_all))
+```
+
+## Question 15
+
+```{r}
+# LifeCycleSavings
+model_11 = lm(sr ~ . ^ 2, data = LifeCycleSavings)
+model_13 = lm(sr ~ pop15 + dpi + ddpi + dpi:ddpi, data = LifeCycleSavings)
+model_all = lm(sr ~ ., data = LifeCycleSavings)
+
+max(summary(model_11)$adj.r.squared, summary(model_13)$adj.r.squared, summary(model_all)$adj.r.squared)
+```
+
+

@@ -1,0 +1,61 @@
+---
+title: "Practice"
+author: "Ashutosh Agarwal"
+date: "8/1/2021"
+output: html_document
+---
+
+## Practice
+
+# 1
+
+
+```{r}
+simpleModel = lm(Hwt ~ Bwt, data = cats)
+coef(simpleModel)[2]
+```
+# 2
+
+```{r}
+library(MASS)
+interModel = lm(Hwt ~  Bwt * Sex, data = cats)
+interModel
+```
+
+# 13
+
+```{r}
+b0 = -3
+b1 = 1
+b2 = 2
+b3 = 3
+
+x1 = -1
+x2 = 0.5
+x3 = 0.25
+
+eta = b0 + b1 * x1 + b2 * x2 + b3 * x3
+1- inv.logit(eta)
+```
+# 14
+
+```{r}
+model = glm(am ~ mpg + hp + qsec, data = mtcars, family = binomial)
+coef(model)["qsec"]
+```
+
+# 15
+
+```{r}
+model = glm(am ~ mpg + hp + qsec, data = mtcars, family = binomial)
+predict(model, newdata = data.frame(mpg = 19, hp = 150, qsec = 19))
+```
+
+# 16
+
+```{r}
+model = glm(am ~ mpg + hp + qsec, data = mtcars, family = binomial)
+null_model = glm(am ~ 1, data = mtcars, family = binomial)
+anova(null_model, model, test = 'LRT')
+```
+

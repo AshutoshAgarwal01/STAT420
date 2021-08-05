@@ -1,0 +1,82 @@
+---
+title: "Week7 - Practice Quiz"
+author: "Ashutosh Agarwal"
+date: "7/2/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Practice Quiz
+
+# Question 1, 2,3 :
+
+Use this model to obtain an estimate of the change in mean tooth length for a dose increase of 1 milligram per day, when the supplement type is orange juice.
+
+```{r}
+model = lm(len ~ dose * supp, data = ToothGrowth)
+
+slopeOrangeJuice = model$coefficients["dose"]
+interceptOrangeJuice = model$coefficients["(Intercept)"]
+
+slopeVC = model$coefficients["dose"] + model$coefficients["dose:suppVC"]
+interceptVC = model$coefficients["suppVC"]
+```
+
+- **Question 1:**
+
+```{r}
+slopeOrangeJuice
+```
+
+- **Question 2:**
+
+```{r}
+slopeVC
+```
+
+- **Question 3:**
+
+To test for interaction between does and supplier type, we need to remove interaction term (with coefficient $\beta_3$) to get null model.
+
+Since both null model and full model differ by only one coefficient, we can use t-test on $\beta_3$
+
+```{r}
+summary(model)$coefficients["dose:suppVC", "Pr(>|t|)"]
+```
+
+# Question 4
+
+```{r}
+unique(ToothGrowth$dose)
+
+# Add a new column that contains factored representation of dose variable.
+ToothGrowth$doseFactor = as.factor(ToothGrowth$dose)
+
+# Now train a model
+# We are using plus (+) instead of asterisk (*) because we are not interested in interaction.
+model = lm(len ~ doseFactor + supp, data = ToothGrowth)
+
+oneMgVC = model$coefficients["(Intercept)"] + model$coefficients["doseFactor1"] + model$coefficients["suppVC"]
+twoMgVC = model$coefficients["(Intercept)"] + model$coefficients["doseFactor2"] + model$coefficients["suppVC"]
+oneMgOJ = model$coefficients["(Intercept)"] + model$coefficients["doseFactor1"]
+twoMgOJ = model$coefficients["(Intercept)"] + model$coefficients["doseFactor2"]
+
+oneMgVC - twoMgVC
+oneMgOJ - twoMgOJ
+```
+
+# Question 5 - Parameterization.
+
+```{r}
+ToothGrowth$d1 = as.numeric(ToothGrowth$dose == 0.5)
+ToothGrowth$d2 = as.numeric(ToothGrowth$dose == 1)
+ToothGrowth$d3 = as.numeric(ToothGrowth$dose == 2)
+ToothGrowth$svc = as.numeric(ToothGrowth$supp == "VC")
+
+model = lm(len ~ 0 + d1 + d2 + d3 + svc, data = ToothGrowth)
+model$coefficients["d3"]
+```
+

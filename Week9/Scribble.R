@@ -1,0 +1,29 @@
+
+```{r}
+# model_start = lm(Balance ~ . -Limit, data = Credit[Credit$Balance > 0, ])
+# model_start = lm(Balance ~ ., data = Credit)
+
+# 50.39, 0.9886, Reject, 11 (p-val = 0.0002)
+# model_start = lm(Balance ~ (. - Married - Gender - Ethnicity - Education - Cards) * I(10 * log(Limit)), data = Credit)
+
+# 144.8, 9028, FTR, 10 ( 0.09)
+# model_start = lm(Balance ~ (. - Married - Gender - Ethnicity - Education - Cards - Student) * I(10 * log(Limit)), data = Credit)
+
+# 52.62, 0.9874, FTR, 10 ( 0.03)
+# model_start = lm(Balance ~ (Income + Limit + Age + Student) * log(Limit), data = Credit)
+
+model_start = lm(Balance ~ (Income + Limit + Age + Student) * log(Limit) - Age:log(Limit), data = Credit)
+mod_a = step(model_start, direction = "backward", k = 2, trace = 0)
+```
+
+```{r}
+# Best so far - 143.4, 0.904, FTR, 8
+# Adding student makes data super normal but it's variance suffers
+# mod_a = lm(Balance ~ I(Rating^-2) * Income * Limit, data = Credit)
+
+# 143.9, 0.9038, FTR, 8
+# mod_a = lm(Balance ~ I(10 * log(Limit)) * Income * log(Rating), data = Credit)
+
+# This is the best.
+# mod_a = lm(Balance ~ (Income + Limit + Age + Student) * log(Limit) - Age:log(Limit), data = Credit)
+```

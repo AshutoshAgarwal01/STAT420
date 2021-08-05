@@ -1,0 +1,157 @@
+---
+title: "Week8 - quiz"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Question 1:
+
+```{r}
+data_1
+data_2
+model1 = lm(y ~ x, data = data_1)
+model2 = lm(y ~ x, data = data_2)
+
+par(mfrow = c(2, 1))
+qqnorm(resid(model1), main = "Model 1")
+qqline(resid(model1))
+
+qqnorm(resid(model2), main = "Model 2")
+qqline(resid(model2))
+```
+
+
+**Answer** More suspect for data_2
+
+##Question 2:
+
+
+```{r}
+data_1
+data_2
+model1 = lm(y ~ x, data = data_1)
+model2 = lm(y ~ x, data = data_2)
+
+# par(mfrow = c(1, 2))
+# plot(fitted(model1), resid(model1))
+# abline(h = 0)
+
+plot(fitted(model2), resid(model2))
+abline(h = 0)
+```
+
+**Answer** More suspect for data_1
+
+## Question 3
+
+```{r}
+x = -3
+mean = 2 + 4 * x
+sd = sqrt(x ^ 2)
+pnorm(q = -12, mean = mean, sd =sd, lower.tail = TRUE)
+```
+
+##Question 4:
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+mean(abs(rstandard(model)) < 2)
+```
+
+## Question 5
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+LifeCycleSavings[which.max(abs(rstandard(model))), ]
+```
+
+## Question 6
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+allHats = hatvalues(model)
+sum(allHats > 2 * mean(allHats))
+```
+
+## Question 7
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+allHats = hatvalues(model)
+LifeCycleSavings[which.max(allHats), ]
+```
+
+## Question 8
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+max(cooks.distance(model))
+```
+
+## Question 9
+
+```{r}
+model = lm(sr ~ ., data = LifeCycleSavings)
+cutoff = 4 / nrow(LifeCycleSavings)
+newDataSet = LifeCycleSavings[cooks.distance(model) <= cutoff, ]
+newModel = lm(sr ~ ., data = newDataSet)
+sum(newModel$coefficients)
+```
+
+## Question 10
+
+```{r}
+airquality = na.omit(airquality)
+model = lm(Ozone ~ poly(Temp, 2), data = airquality)
+summary(model)$coefficients[3, 4]
+```
+
+## Question 11
+
+```{r}
+airquality = na.omit(airquality)
+model1 = lm(Ozone ~ poly(Temp, 2), data = airquality)
+model2 = lm(Ozone ~ poly(Temp, 4), data = airquality)
+anova(model1, model2)[2, 'Pr(>F)']
+```
+
+## Question 12
+
+ - Reject $H_0$ Normality assumption is suspect.    
+ 
+```{r}
+airquality = na.omit(airquality)
+model1 = lm(Ozone ~ poly(Temp, 4), data = airquality)
+shapiro.test(resid(model1))
+```
+
+## Question 13
+
+ - Fail to reject $H_0$ Normality assumption is not suspect.  
+ 
+```{r}
+airquality = na.omit(airquality)
+model = lm(log(Ozone) ~ Temp, data = airquality)
+shapiro.test(resid(model))
+```
+
+## Question 14
+ 
+```{r}
+airquality = na.omit(airquality)
+model = lm(log(Ozone) ~ Temp, data = airquality)
+transformedInterval = predict(model, newdata = data.frame(Temp = 84), level = 0.9, interval = c("prediction"))
+exp(transformedInterval[, "upr"])
+```
+
+## Question 15
+ 
+```{r}
+airquality = na.omit(airquality)
+model = lm(log(Ozone) ~ Temp, data = airquality)
+r = resid(model)
+var(r[which(predict(model) < 3.5)]) / var(r[which(predict(model) > 3.5)])
+```

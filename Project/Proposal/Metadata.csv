@@ -1,0 +1,22 @@
+Name,Description,Type,Category,IsImportant
+id,Id of the house.,Continuous,NA,No
+date,Date when house was sold.,Continuous,Predictor,No
+price,Price at which house was sold.,Continuous,Response,Yes
+bedrooms,Number of bedrooms in the house.,Discreet,Predictor,Yes
+bathrooms,Number of bathrooms in the house.,Discreet,Predictor,Yes
+sqft_living,Are of house in sqaure feet.,Continuous,Predictor,Yes
+sqft_lot,Are of lot in which house is situation in square feet.,Continuous,Predictor,Yes
+floors,Number of floors (levels) in the house.,Discreet,Predictor,No
+waterfront,Indicates whether house is located on waterfront.,Categorical,Predictor,Yes
+view,Rating from 0 to 4 indicating how good the view of the house was (4 being best),Categorical,Predictor,No
+condition,Rating from 1 to 5 indicating condition of the house (5 being best),Categorical,Predictor,Yes
+grade,Rating from 1 to 13 indicating quality of construction and design (13 being best).,Categorical,Predictor,Yes
+sqft_above,Square footage of house apart from basement,Continuous,Predictor,Yes
+sqft_basement,Area of basement in square feet.,Continuous,Predictor,Yes
+yr_built,Year in which house was built.,Discreet,Predictor,Yes
+yr_renovated,Year in which house was renovated.,Discreet,Predictor,No
+zipcode,Zip code,Discreet,Predictor,No
+lat,Latitude coordinate of the geograohic location of house,Continuous,Predictor,Yes
+long,Longitude coordinate of the geographic location of house.,Continuous,Predictor,Yes
+sqft_living15,Average living area of 15 nearby houses.,Continuous,Predictor,No
+sqft_lot15,Average lot area of 15 nearby houses.,Continuous,Predictor,No
