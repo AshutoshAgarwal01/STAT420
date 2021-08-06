@@ -1,0 +1,218 @@
+---
+title: "FinalProject"
+author: "Ashutosh Agarwal"
+date: "8/4/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Final Project
+
+### Common Functions
+
+#### Plot histograms of multiple colums in a data frame
+
+```{r}
+allHist = function(dataFrame, columNames)
+{
+  # Max charts in one row.
+  chartsInOneRow = 4
+  colCount = length(columNames)
+  
+  # Find number of rows
+  rowCount = colCount %/% chartsInOneRow
+  if (colCount %% chartsInOneRow != 0)
+  {
+    rowCount = rowCount + 1
+  }
+  
+  par(mfrow=c(rowCount,chartsInOneRow))
+  
+  for(col in columNames)
+  {
+    hist(dataFrame[, col], main=col)
+  }
+}
+```
+
+  - Common function to calculate leave one out cross validation RMSE
+
+```{r}
+calc_loocv_rmse = function(model) {
+  sqrt(mean((resid(model) / (1 - hatvalues(model))) ^ 2))
+}
+```
+
+
+#### Convert data frame to new structure.
+
+This method will transform some variables of the data frame into new variables.
+
+Variables transformed are:
+
+  - View
+  - Condition
+  - Floor
+
+```{r}
+convertToNewHouseStr = function(dataFrame)
+{
+  # Compress view into only two categories. Bad and Good.
+  dataFrame$newView = ifelse(dataFrame$view <= 1, "Bad", "Good")
+  dataFrame$newView = as.factor(dataFrame$newView)
+  
+  # Compress condition into three categories Bad, Good and Very Good.
+  dataFrame$newCondition = ifelse(dataFrame$condition <= 2, "Bad", ifelse(dataFrame$condition > 3 , "VGood", "Good"))
+  dataFrame$newCondition = as.factor(dataFrame$newCondition)
+  
+  # Merge floor 3 and 3.5, convert floor as factor variable.
+  dataFrame$newFloors = ifelse(dataFrame$floors >= 3, 3, dataFrame$floors)
+  dataFrame$newFloors = as.factor(dataFrame$newFloors)
+  
+  dataFrame
+}
+```
+
+
+## Loading data.
+
+```{r fig.width=15}
+houseData = read.csv("kc_house_data.csv")
+```
+
+## Variable selection and transformation
+
+### Categorical variable analysis.
+
+#### Histograms of all variables that have some levels in them.
+
+```{r}
+allHist(houseData, c("bedrooms", "bathrooms", "floors",	"waterfront",	"view",	"condition",	"grade", "yr_built"))
+```
+-   Based on the histograms we can say/ decide following about the variable types.
+
+  -   **Waterfront** The data is very skewed in that column. Most of the rows belong to only one category. It will not add much value to the model for price prediction. Therefore `we decide to drop this column.`
+  
+  - **View** Most of the observations belong to `view = 0`. However we can see values in other view categories as well. We can make this category smaller by clubbing views together. We will create a new column in data frame to store this transformation. Hence this will become a `categorical variable`.
+  
+    - View 0 and 1 --> 0 (Bad view)
+    - All other --> 1 (Good view)
+  
+  - **Condition** There are very few values in conditions 1 and 2. By combining multiple categories into one, we can reduce complexity of this data. We will create a new column in data frame to store this transformation. Hence this will become a `categorical variable`.
+  
+    - Condition 1 and 2 --> 0 (Bad)
+    - Condition 3  --> 1 (Good)
+    - Condition 4 and 5  --> 2 (Very good)
+  
+  - **grade, bathroom** Data of grade and bathroom has many levels and they are relatively well distributed. We are going to consider these as `numeric continuous variable`.
+
+  
+  - **floor** There are only 8 observations for floor 3.5. We can combine that with floor 3 for simplicity. We will keep it as `categorical variable`
+  
+  - **Bedroom** **TBD** For now, keep it as `continuous variable`
+
+#### Adding new columns in the data frame as per above conversion strategy.
+
+```{r}
+newHouseData = convertToNewHouseStr(houseData)
+```
+
+### Variable selection by correlation
+
+To start with, we are considering following variables for model building.
+
+"bedrooms", "bathrooms", "sqft_living", "sqft_lot", "newFloors", "newView", "newCondition", "grade", "sqft_above", "sqft_basement"
+
+```{r}
+# Selected columns for first pass.
+
+reducedHouseData = newHouseData[, c("price", "bedrooms", "bathrooms", "sqft_living", "sqft_lot", "newFloors", "newView", "newCondition", "grade", "sqft_above", "sqft_basement")]
+```
+
+
+#### Create a pairs plot to see which variables are highly correlated.
+
+  - This will visually indicate which variables might be redundant in the model.
+  - And which variables are suited for any kind of transformation.
+
+```{r fig.height=20, fig.width=25}
+pairs(reducedHouseData)
+```
+#### Print Variance Inflation factor (VIF) to understand which variables explain variance of each other most.
+
+This will help us eliminate any redundant variables.
+
+```{r}
+round(faraway::vif(subset(reducedHouseData, select = -c(newFloors, newView, newCondition))), 2)
+```
+  - We see that sqft_living, sqft_above and sqft_basement are highly correlated. It is evident by the paris plot as well.
+  
+  - We will `remove sqft_above` and regenerate VIFs
+
+```{r}
+round(faraway::vif(subset(reducedHouseData, select = -c(newFloors, newView, newCondition, sqft_above))), 2)
+```
+
+  - VIF of `sqft_living` is still high (greater than 5) but we will keep it at this stage.
+  
+### Try building first model.
+
+  - Splitting dataset into train and test set.
+
+```{r}
+set.seed(420)
+train_size = floor(0.8 * nrow(newHouseData))
+train_idx = sample(seq(1: nrow(newHouseData)), train_size)
+train_house_data = newHouseData[train_idx, ]
+test_house_data = newHouseData[-train_idx, ]
+```
+  
+  - Try backward AIC first.
+  
+```{r}
+# 0.5892429, 13, 239380.6
+# model_start = lm(price ~ bedrooms + bathrooms + sqft_living + sqft_lot + newFloors + newView + newCondition + grade + sqft_basement,
+#                 data = train_house_data)
+
+# 0.6054204 --> 13, 234848.3
+model_start = lm(price ~ bedrooms + bathrooms + sqft_living + sqft_lot + newFloors + newView + newCondition + I(exp(grade)),
+                 data = train_house_data)
+
+# model_start = lm(price ~ bedrooms + bathrooms + sqft_living + I(1/sqft_lot) + newFloors + newView + newCondition + I(exp(grade)),
+#                 data = train_house_data)
+
+n = nrow(train_house_data)
+house_model_bak_aic_add_all = step(model_start, direction = "backward", k = 2, trace = 0)
+summary(house_model_bak_aic_add_all)$adj.r.squared
+length(coef(house_model_bak_aic_add_all))
+calc_loocv_rmse(house_model_bak_aic_add_all)
+
+```
+  - Find outliers.
+  
+  After removing outliers, out adj R squared dropped a bit but LOOCRMSE decreased significantly which is a good sign.
+  
+```{r}
+noOutliersTrainData = train_house_data[-which(cooks.distance(house_model_bak_aic_add_all) > 4/ nrow(train_house_data)), 1]
+length(noOutliersTrainData)
+
+model_start = lm(price ~ bedrooms + bathrooms + sqft_living + sqft_lot + newFloors + newView + newCondition + I(exp(grade)),
+                 data = train_house_data,
+                 subset = cooks.distance(house_model_bak_aic_add_all) <= 4/ nrow(train_house_data))
+
+house_model_bak_aic_add_all = step(model_start, direction = "backward", k = 2, trace = 0)
+summary(house_model_bak_aic_add_all)$adj.r.squared
+length(coef(house_model_bak_aic_add_all))
+calc_loocv_rmse(house_model_bak_aic_add_all)
+```
+- Predict
+
+```{r}
+newTest = convertToNewHouseStr(test_house_data)
+predictions = predict(house_model_bak_aic_add_all, newdata = newTest)
+sqrt(mean((predictions - newTest$price) ^2))
+```
+
