@@ -6,7 +6,8 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+library("knitr")
+opts_chunk$set(echo = TRUE)
 ```
 
 ## Final Project
@@ -41,11 +42,45 @@ allHist = function(dataFrame, columNames)
   - Common function to calculate leave one out cross validation RMSE
 
 ```{r}
-calc_loocv_rmse = function(model) {
+calc_loocv_rmse = function(model)
+{
   sqrt(mean((resid(model) / (1 - hatvalues(model))) ^ 2))
+}
+
+loocv = function(lm_model)
+{
+  return (sqrt(mean(((resid(lm_model)/ (1 - hatvalues(lm_model))) ^ 2))))
 }
 ```
 
+```{r}
+rmse = function(lm_model)
+{
+  return (sqrt(mean(resid(lm_model) ^ 2)))
+}
+```
+
+```{r}
+AIC = function(lm_model)
+{
+  return(extractAIC(lm_model)[2])
+}
+
+BIC = function(lm_model)
+{
+  return(extractAIC(lm_model, k = log(nrow(lm_model$model)))[2])
+}
+
+r2 = function(lm_model)
+{
+  return (summary(lm_model)$r.squared)
+}
+
+adj_r2 = function(lm_model)
+{
+  return (summary(lm_model)$adj.r.squared)
+}
+```
 
 #### Convert data frame to new structure.
 
@@ -55,27 +90,90 @@ Variables transformed are:
 
   - View
   - Condition
-  - Floor
+  - Grade
 
 ```{r}
 convertToNewHouseStr = function(dataFrame)
 {
   # Compress view into only two categories. Bad and Good.
-  dataFrame$newView = ifelse(dataFrame$view <= 1, "Bad", "Good")
+  dataFrame$newView = ifelse(dataFrame$view <= 1, 0, 1)
   dataFrame$newView = as.factor(dataFrame$newView)
   
   # Compress condition into three categories Bad, Good and Very Good.
-  dataFrame$newCondition = ifelse(dataFrame$condition <= 2, "Bad", ifelse(dataFrame$condition > 3 , "VGood", "Good"))
+  dataFrame$newCondition = ifelse(dataFrame$condition <= 2, 0, ifelse(dataFrame$condition > 3 , 2, 1))
   dataFrame$newCondition = as.factor(dataFrame$newCondition)
   
   # Merge floor 3 and 3.5, convert floor as factor variable.
-  dataFrame$newFloors = ifelse(dataFrame$floors >= 3, 3, dataFrame$floors)
-  dataFrame$newFloors = as.factor(dataFrame$newFloors)
+  # dataFrame$newFloors = ifelse(dataFrame$floors >= 2.5, 3, ifelse(dataFrame$floors == 1 , 1, 2))
+  # dataFrame$newFloors = as.factor(dataFrame$newFloors)
+  
+  # TODO: Remove this, this has been done so that we do not need to delete old code.
+  dataFrame$newFloors = dataFrame$floors
+  
+  # Merge grade greater than 7 to 1 otherwise 0, convert as factor variable.
+  dataFrame$newGrade = ifelse(dataFrame$grade >= 8, 1, 0)
+  dataFrame$newGrade = as.factor(dataFrame$newGrade)
+  
+  dataFrame$new12Grade = as.factor(dataFrame$grade)
+  
+  dataFrame$waterfront = as.factor(dataFrame$waterfront)
   
   dataFrame
 }
 ```
 
+```{r}
+call_summary = function(model_list){
+  n = length(model_list)
+  model_stats = data.frame("Num of Parameters" = rep(0, n),
+                           "RSE" = rep(0, n),
+                         "RMSE" = rep(0, n),
+                         "LOOCV-RMSE" = rep(0, n),
+                         "AIC" = rep(0, n),
+                         "BIC" = rep(0, n),
+                         "R Squared" = rep(0, n),
+                         "Adj R Squared" = rep(0, n))
+  for (i in 1:n)
+  {
+    model_stats$Num.of.Parameters[i] = length(coef(model_list[[i]]))
+    model_stats$RSE[i] = summary(model_list[[i]])$sigma
+    model_stats$RMSE[i] = rmse(model_list[[i]])
+    model_stats$LOOCV.RMSE[i] = loocv(model_list[[i]])
+    model_stats$AIC[i] = AIC(model_list[[i]])
+    model_stats$BIC[i] = BIC(model_list[[i]])
+    model_stats$R.Squared[i] = r2(model_list[[i]])
+    model_stats$Adj.R.Squared[i] = adj_r2(model_list[[i]])
+  }
+  
+  kable(model_stats, align = c("c", "r"))
+}
+```
+
+
+#### Common method to draw fitted vs residual and qq plots.
+
+```{r, echo = FALSE}
+plot_fitted_resid = function(model, pointcol = "dodgerblue", linecol = "darkorange") {
+  plot(fitted(model), resid(model), 
+       col = pointcol, pch = 20, cex = 1.5,
+       xlab = "Fitted", ylab = "Residuals")
+  abline(h = 0, col = linecol, lwd = 2)
+}
+
+plot_qq = function(model, pointcol = "dodgerblue", linecol = "darkorange") {
+  qqnorm(resid(model), col = pointcol, pch = 20, cex = 1.5)
+  qqline(resid(model), col = linecol, lwd = 2)
+}
+```
+
+#### Transform resoponse back to original based on lambda (Box-Cox)
+
+```{r}
+removeTransformation = function(y, lamda)
+{
+  (lamda * y + 1)^(1/lamda)
+}
+```
 
 ## Loading data.
 
@@ -92,9 +190,10 @@ houseData = read.csv("kc_house_data.csv")
 ```{r}
 allHist(houseData, c("bedrooms", "bathrooms", "floors",	"waterfront",	"view",	"condition",	"grade", "yr_built"))
 ```
+
 -   Based on the histograms we can say/ decide following about the variable types.
 
-  -   **Waterfront** The data is very skewed in that column. Most of the rows belong to only one category. It will not add much value to the model for price prediction. Therefore `we decide to drop this column.`
+  - **Waterfront** The data is very skewed in that column. Most of the rows belong to only one category. It will not add much value to the model for price prediction. Therefore `we decide to drop this column.`
   
   - **View** Most of the observations belong to `view = 0`. However we can see values in other view categories as well. We can make this category smaller by clubbing views together. We will create a new column in data frame to store this transformation. Hence this will become a `categorical variable`.
   
@@ -107,10 +206,11 @@ allHist(houseData, c("bedrooms", "bathrooms", "floors",	"waterfront",	"view",	"c
     - Condition 3  --> 1 (Good)
     - Condition 4 and 5  --> 2 (Very good)
   
-  - **grade, bathroom** Data of grade and bathroom has many levels and they are relatively well distributed. We are going to consider these as `numeric continuous variable`.
-
+  - **grade** Data of grade has many levels, we decided to divide them into two categories `low (0) < 8` and `high (1) >= 8` .
   
-  - **floor** There are only 8 observations for floor 3.5. We can combine that with floor 3 for simplicity. We will keep it as `categorical variable`
+  - **bathroom** Data of bathroom has many levels and they are relatively well distributed. We are going to consider this as `numeric continuous variable`.
+  
+  - **floor DELETE THIS** We decided to divide floor into three categories ` >= 2.5 --> 3` `>=1.5 --> 2` and `rest 1`. We will keep it as `categorical variable`
   
   - **Bedroom** **TBD** For now, keep it as `continuous variable`
 
@@ -124,12 +224,13 @@ newHouseData = convertToNewHouseStr(houseData)
 
 To start with, we are considering following variables for model building.
 
-"bedrooms", "bathrooms", "sqft_living", "sqft_lot", "newFloors", "newView", "newCondition", "grade", "sqft_above", "sqft_basement"
+"bedrooms", "bathrooms", "sqft_living", "sqft_lot", "newFloors", "newView", "newCondition", "newGrade", "sqft_above", "sqft_basement", "sqft_living15",	"sqft_lot15", "yr_built"
+
 
 ```{r}
 # Selected columns for first pass.
 
-reducedHouseData = newHouseData[, c("price", "bedrooms", "bathrooms", "sqft_living", "sqft_lot", "newFloors", "newView", "newCondition", "grade", "sqft_above", "sqft_basement")]
+reducedHouseData = newHouseData[, c("price", "bedrooms", "bathrooms", "sqft_living", "sqft_lot", "newFloors", "newView", "newCondition", "newGrade", "sqft_above", "sqft_basement", "sqft_living15",	"sqft_lot15", "yr_built")]
 ```
 
 
@@ -139,25 +240,51 @@ reducedHouseData = newHouseData[, c("price", "bedrooms", "bathrooms", "sqft_livi
   - And which variables are suited for any kind of transformation.
 
 ```{r fig.height=20, fig.width=25}
-pairs(reducedHouseData)
+# pairs(reducedHouseData)
 ```
-#### Print Variance Inflation factor (VIF) to understand which variables explain variance of each other most.
+
+#### Print correlation matrix
+
+```{r}
+round(cor(subset(reducedHouseData, select = -c(newView, newCondition, newGrade))), 2)
+```
+
+  - We can see that correlation is very high in following combinations.
+    - sqft_living and bathrooms --> 0.75
+    - sqft_living and sqft_above --> 0.88
+    - sqft_living and sqft_living15 --> 0.76
+    - sqft_lot and sqft_lot15 --> 0.72
+    - sqft_living15 and sqft_above --> 0.73
+
+#### Print Variance Inflation factor (VIF) to understand which variables explain variance of each other the most.
 
 This will help us eliminate any redundant variables.
 
 ```{r}
-round(faraway::vif(subset(reducedHouseData, select = -c(newFloors, newView, newCondition))), 2)
+round(faraway::vif(subset(reducedHouseData, select = -c(newView, newCondition, newGrade))), 2)
 ```
-  - We see that sqft_living, sqft_above and sqft_basement are highly correlated. It is evident by the paris plot as well.
+  - We see that sqft_living, sqft_above and sqft_basement are highly correlated. It is evident by the pairs plot and correlation matrix as well.
   
-  - We will `remove sqft_above` and regenerate VIFs
+  - We will `remove sqft_above` and regenerate VIFs.
 
 ```{r}
-round(faraway::vif(subset(reducedHouseData, select = -c(newFloors, newView, newCondition, sqft_above))), 2)
+round(faraway::vif(subset(reducedHouseData, select = -c(newView, newCondition, newGrade, sqft_above))), 2)
 ```
 
-  - VIF of `sqft_living` is still high (greater than 5) but we will keep it at this stage.
+  - VIF is still high and we know that there are following high correlation present in the data set.
   
+    - sqft_living and bathrooms --> 0.75
+    - sqft_living and sqft_living15 --> 0.76
+    - sqft_lot and sqft_lot15 --> 0.72
+
+  - `Remove sqft_living15 and sqft_lot15` and check VIF again.
+
+```{r}
+round(faraway::vif(subset(reducedHouseData, select = -c(newView, newCondition, newGrade, sqft_above, sqft_living15, sqft_lot15))), 2)
+```
+
+  - This looks more reasonable.
+
 ### Try building first model.
 
   - Splitting dataset into train and test set.
@@ -173,25 +300,137 @@ test_house_data = newHouseData[-train_idx, ]
   - Try backward AIC first.
   
 ```{r}
-# 0.5892429, 13, 239380.6
-# model_start = lm(price ~ bedrooms + bathrooms + sqft_living + sqft_lot + newFloors + newView + newCondition + grade + sqft_basement,
-#                 data = train_house_data)
+n = nrow(train_house_data)
 
-# 0.6054204 --> 13, 234848.3
-model_start = lm(price ~ bedrooms + bathrooms + sqft_living + sqft_lot + newFloors + newView + newCondition + I(exp(grade)),
+# With grade as continuous.
+# 0.632719, 13, 226355.5
+model_start1 = lm(price ~ bedrooms + bathrooms + sqft_living + sqft_lot + sqft_basement + yr_built + newFloors + newView + newCondition + grade ,
                  data = train_house_data)
 
-# model_start = lm(price ~ bedrooms + bathrooms + sqft_living + I(1/sqft_lot) + newFloors + newView + newCondition + I(exp(grade)),
-#                 data = train_house_data)
+house_model_bak_aic_add_all1 = step(model_start1, direction = "backward", k = log(n), trace = 0)
+
+# With new grade
+# 0.5882713, 13, 239658.8
+model_start2 = lm(price ~ bedrooms + bathrooms + sqft_living + sqft_lot + sqft_basement + yr_built + newFloors + newView + newCondition + newGrade ,
+                 data = train_house_data)
+house_model_bak_aic_add_all2 = step(model_start2, direction = "backward", k = log(n), trace = 0)
+
+# With grade as continuous numeric.
+# 0.6473623 --> 13, 0.3140581 (RMSE is small because it is log.)
+model_start3 = lm(log(price) ~ bedrooms + bathrooms + sqft_living + I(1/sqft_lot) + sqft_basement + yr_built + newFloors + newView + newCondition + grade,
+                 data = train_house_data)
+house_model_bak_aic_add_all3 = step(model_start3, direction = "backward", k = log(n), trace = 0)
+
+# 0.5567463, 10, 0.3521435
+model_start4 = lm(log(price) ~ bedrooms + bathrooms + sqft_living + sqft_lot + sqft_basement + yr_built + newFloors + newView + newCondition,
+                 data = train_house_data)
+house_model_bak_aic_add_all4 = step(model_start4, direction = "backward", k = log(n), trace = 0)
+
+# 0.5605226, 11, 0.3506532
+model_start5 = lm(log(price) ~ bedrooms + bathrooms + sqft_living + sqft_lot + sqft_basement + yr_built + newFloors + newView + newCondition + waterfront,
+                 data = train_house_data)
+house_model_bak_aic_add_all5 = step(model_start5, direction = "backward", k = log(n), trace = 0)
+
+# 0.6045867 --> 11, 0.3325646
+model_start6 = lm(log(price) ~ bedrooms + bathrooms + sqft_living + I(1/sqft_lot) + sqft_basement + yr_built + newFloors + newView + newCondition + newGrade,
+                 data = train_house_data)
+house_model_bak_aic_add_all6 = step(model_start6, direction = "backward", k = log(n), trace = 0)
+
+# 0.650639, 23, Inf
+model_start7 = lm(log(price) ~ bedrooms + bathrooms + sqft_living + sqft_lot + sqft_basement + yr_built + newFloors + newView + newCondition + waterfront + new12Grade, data = train_house_data)
+house_model_bak_aic_add_all7 = step(model_start, direction = "backward", k = log(n), trace = 0)
+
+# 0.5605193, 12, 0.3506688
+model_start = lm(log(price) ~ bedrooms + bathrooms + sqft_living + sqft_lot + sqft_basement + yr_built + newFloors + newView + newCondition + waterfront, data = train_house_data)
+house_model_bak_aic_add_all = step(model_start7, direction = "backward", k = log(n), trace = 0)
+
+# 0.6580825, 24, 7.007969
+# With back BIC - 0.6581008, 23, Inf
+model_start8 = lm(log(price) ~ bedrooms + bathrooms + sqft_living + sqft_living15 + sqft_lot + sqft_basement + yr_built + newFloors + newView + newCondition + waterfront + new12Grade, data = train_house_data)
+house_model_bak_aic_add_all8 = step(model_start8, direction = "backward", k = log(n), trace = 0)
+
+# summary(house_model_bak_aic_add_all)$adj.r.squared
+# length(coef(house_model_bak_aic_add_all))
+# calc_loocv_rmse(house_model_bak_aic_add_all)
+# summary(house_model_bak_aic_add_all)
+
+# model_stats = data.frame("Num of Parameters" = length(coef(house_model_bak_aic_add_all)),
+#                         "RSE" = summary(house_model_bak_aic_add_all)$sigma,
+#                         "RMSE" = rmse(house_model_bak_aic_add_all),
+#                         "LOOCV-RMSE" = loocv(house_model_bak_aic_add_all),
+#                         "AIC" = AIC(house_model_bak_aic_add_all),
+#                         "BIC" = BIC(house_model_bak_aic_add_all),
+#                         "R Squared" = r2(house_model_bak_aic_add_all),
+#                         "Adj R Squared" = adj_r2(house_model_bak_aic_add_all))
+#kable(model_stats, align = c("c", "r"))
+
+model_list = list(model_start1, house_model_bak_aic_add_all1, 
+                  model_start2, house_model_bak_aic_add_all2, 
+                  model_start3, house_model_bak_aic_add_all3, 
+                  model_start4, house_model_bak_aic_add_all4, 
+                  model_start5, house_model_bak_aic_add_all5, 
+                  model_start6, house_model_bak_aic_add_all6, 
+                  model_start7, house_model_bak_aic_add_all7, 
+                  model_start8, house_model_bak_aic_add_all8)
+call_summary(model_list)
+```
+
+#### Check model assumptions.
+
+  - Calling methods `plot_fitted_resid` and `plot_qq`
+  
+```{r fig.height=5, fig.width=15}
+par(mfrow=c(1,2))
+plot_fitted_resid(house_model_bak_aic_add_all)
+plot_qq(house_model_bak_aic_add_all)
+```
+
+  - BP test for constant variance - p-Value under BP test is low which means assumption of constant variance is violated.
+  
+```{r}
+library(lmtest)
+bptest(house_model_bak_aic_add_all)
+```
+    
+  - shapiro.test for normality assumption - P-Value is very low, which means we can say that assumption of normality is also not violated.
+  
+  [Note: Since shapiro.test does not allow testing for more than 5000 samples, we have taken first 5000 rows.]
+  
+```{r}
+shapiro.test(resid(house_model_bak_aic_add_all)[1:5000])
+```
+  - Both plots and p-values of tests suggest that this model `violates both assumption of normality and constant variance.` Therefore, we can use it for prediction but should not use for inference (i.e. test significance of coefficients.)
+
+#### Try Box-cox transformation to transform response.
+
+```{r}
+# Note that response is not log transformed here.
+model_start = lm(price ~ bedrooms + bathrooms + sqft_living + I(1/sqft_lot) + sqft_basement + yr_built + newFloors + newView + newCondition + grade,
+                 data = train_house_data)
+
+library(MASS)
+library(faraway)
+
+boxcox(model_start, plotit = TRUE, lambda = seq(-0.25, 0.25, by = 0.05))
+```
+
+  - value of $\lambda = 0.08$
+
+####  Transform response based on lambda and see the response.
+
+```{r}
+lam = 0.08
+model_start = lm((price^ lam - 1)/lam  ~ bedrooms + bathrooms + sqft_living + I(1/sqft_lot) + sqft_basement + yr_built + newFloors + newView + newCondition + grade, data = train_house_data)
 
 n = nrow(train_house_data)
 house_model_bak_aic_add_all = step(model_start, direction = "backward", k = 2, trace = 0)
 summary(house_model_bak_aic_add_all)$adj.r.squared
 length(coef(house_model_bak_aic_add_all))
 calc_loocv_rmse(house_model_bak_aic_add_all)
-
+summary(house_model_bak_aic_add_all)
 ```
-  - Find outliers.
+
+#### Find outliers.
   
   After removing outliers, out adj R squared dropped a bit but LOOCRMSE decreased significantly which is a good sign.
   
@@ -199,9 +438,11 @@ calc_loocv_rmse(house_model_bak_aic_add_all)
 noOutliersTrainData = train_house_data[-which(cooks.distance(house_model_bak_aic_add_all) > 4/ nrow(train_house_data)), 1]
 length(noOutliersTrainData)
 
-model_start = lm(price ~ bedrooms + bathrooms + sqft_living + sqft_lot + newFloors + newView + newCondition + I(exp(grade)),
-                 data = train_house_data,
-                 subset = cooks.distance(house_model_bak_aic_add_all) <= 4/ nrow(train_house_data))
+# model_start = lm(log(price) ~ bedrooms + bathrooms + sqft_living + I(1/sqft_lot) + sqft_basement + yr_built + newFloors + newView + newCondition + grade,
+#                  data = train_house_data,
+#                 subset = cooks.distance(house_model_bak_aic_add_all) <= 4/ nrow(train_house_data))
+
+model_start = lm((price^ lam - 1)/lam  ~ bedrooms + bathrooms + sqft_living + I(1/sqft_lot) + sqft_basement + yr_built + newFloors + newView + newCondition + grade, data = train_house_data, subset = cooks.distance(house_model_bak_aic_add_all) <= 4/ nrow(train_house_data))
 
 house_model_bak_aic_add_all = step(model_start, direction = "backward", k = 2, trace = 0)
 summary(house_model_bak_aic_add_all)$adj.r.squared
@@ -213,6 +454,9 @@ calc_loocv_rmse(house_model_bak_aic_add_all)
 ```{r}
 newTest = convertToNewHouseStr(test_house_data)
 predictions = predict(house_model_bak_aic_add_all, newdata = newTest)
-sqrt(mean((predictions - newTest$price) ^2))
+
+# Need to take exponent of prediction because it was log in the model.
+# sqrt(mean((exp(predictions) - newTest$price) ^2))
+sqrt(mean((removeTransformation(predictions, lam) - newTest$price) ^2))
 ```
 

@@ -1,0 +1,145 @@
+---
+title: "Backup"
+author: "Ashutosh Agarwal"
+date: "8/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+- Checking **Partial correlation coefficient** of `sqft_living15` and `price`
+
+```{r}
+# without sqft_living15
+model1 = lm(price ~ bedrooms + bathrooms + sqft_living + sqft_lot + sqft_basement + sqft_lot15 + yr_built, data = reducedHouseData)
+
+# without price
+model2 = lm(sqft_living15 ~ bedrooms + bathrooms + sqft_living + sqft_lot + sqft_basement + sqft_lot15 + yr_built, data = reducedHouseData )
+
+cor(resid(model2), resid(model1))
+```
+
+- Checking **Partial correlation coefficient** of `sqft_living` and `price`
+
+```{r}
+# Without sqft_living
+model1 = lm(price ~ bedrooms + bathrooms + sqft_living15 + sqft_lot + sqft_basement + sqft_lot15 + yr_built, data = reducedHouseData)
+
+# without price
+model2 = lm(sqft_living ~ bedrooms + bathrooms + sqft_living15 + sqft_lot + sqft_basement + sqft_lot15 + yr_built, data = reducedHouseData )
+
+cor(resid(model2), resid(model1))
+
+```
+
+- Checking **Partial correlation coefficient** of `sqft_lot15` and `price`
+
+```{r}
+# Without sqft_lot15
+model1 = lm(price ~ bedrooms + bathrooms + sqft_living15 + sqft_living + sqft_lot + sqft_basement + yr_built, data = reducedHouseData)
+
+# without price
+model2 = lm(sqft_lot15  ~ bedrooms + bathrooms + sqft_living15 + sqft_living + sqft_lot + sqft_basement + yr_built, data = reducedHouseData )
+
+cor(resid(model2), resid(model1))
+```
+
+- Checking **Partial correlation coefficient** of `sqft_lot` and `price`
+
+```{r}
+# Without sqft_lot15
+model1 = lm(price ~ bedrooms + bathrooms + sqft_living15 + sqft_living + sqft_lot15 + sqft_basement + yr_built, data = reducedHouseData)
+
+# without price
+model2 = lm(sqft_lot  ~ bedrooms + bathrooms + sqft_living15 + sqft_living + sqft_lot15 + sqft_basement + yr_built, data = reducedHouseData )
+
+cor(resid(model2), resid(model1))
+```
+
+- **Result** From Partial correlation coefficients, we can say that having sqft_lot and sqft_lot15 in the model do not seem to add any value.
+
+
+#### Check significance of categorical variables.
+
+$H_0: \beta_{newFloors} = 0$ vs $H_1: \beta_{newFloors} \neq 0$
+  
+  ```{r}
+nullModel = lm(log(price) ~ bedrooms + bathrooms + sqft_living + I(1/sqft_lot) + sqft_basement + yr_built + newView + newCondition + grade,
+               data = train_house_data)
+anova(nullModel, house_model_bak_aic_add_all)$"Pr(>F)"[2]
+```
+
+$H_0: \beta_{newView} = 0$ vs $H_1: \beta_{newView} \neq 0$
+  
+  ```{r}
+nullModel = lm(log(price) ~ bedrooms + bathrooms + sqft_living + I(1/sqft_lot) + sqft_basement + yr_built + newFloors + newCondition + grade,
+               data = train_house_data)
+anova(nullModel, house_model_bak_aic_add_all)$"Pr(>F)"[2]
+```
+
+$H_0: \beta_{newCondition} = 0$ vs $H_1: \beta_{newCondition} \neq 0$
+  
+  ```{r}
+nullModel = lm(log(price) ~ bedrooms + bathrooms + sqft_living + I(1/sqft_lot) + sqft_basement + yr_built + newFloors + newView + grade,
+               data = train_house_data)
+anova(nullModel, house_model_bak_aic_add_all)$"Pr(>F)"[2]
+```
+
+- **Result of significance testing** We see that p-value for all categorical variables `newFloors, newView and newCondition` is very low. Therefore we can reject null hypothesis for any reasonable value of alpha. In other words, **all these variables are significant in the model**.
+
+
+
+rmse = function(lm_model){
+  return (sqrt(mean(resid(lm_model) ^ 2)))
+}
+loocv = function(lm_model){
+  return (sqrt(mean(((resid(lm_model)/ (1 - hatvalues(lm_model))) ^ 2))))
+}
+AIC = function(lm_model){
+  return(extractAIC(lm_model)[2])
+}
+BIC = function(lm_model){
+  return(extractAIC(lm_model, k = log(nrow(lm_model$model)))[2])
+}
+r2 = function(lm_model){
+  return (summary(lm_model)$r.squared)
+}
+adj_r2 = function(lm_model){
+  return (summary(lm_model)$adj.r.squared)
+}
+call_summary = function(model_list){
+  n = length(model_list)
+  model_stats = data.frame(“Num of Parameters” = rep(0, n),
+                           “RSE” = rep(0, n),
+                         “RMSE” = rep(0, n),
+                         “LOOCV-RMSE” = rep(0, n),
+                         “AIC” = rep(0, n),
+                         “BIC” = rep(0, n),
+                         “R Squared” = rep(0, n),
+                         “Adj R Squared” = rep(0, n))
+  for (i in 1:n){
+    model_stats$Num.of.Parameters[i] = length(coef(model_list[i]))
+    model_stats$RSE[i] = summary(model_list[i])$sigma
+    model_stats$RMSE[i] = rmse(model_list[i])
+    model_stats$LOOCV.RMSE[i] = loocv(model_list[i])
+    model_stats$AIC[i] = AIC(model_list[i])
+    model_stats$BIC[i] = BIC(model_list[i])
+    model_stats$R.Squared[i] = r2(model_list[i])
+    model_stats$Adj.R.Squared[i] = adj_r2(model_list[i])
+  }
+  kable(model_stats, align = c(“c”, “r”))
+}
+model_stats = data.frame(“Num of Parameters” = length(coef(housing_model)),
+                         “RSE” = summary(housing_model)$sigma,
+                         “RMSE” = rmse(housing_model),
+                         “LOOCV-RMSE” = loocv(housing_model),
+                         “AIC” = AIC(housing_model),
+                         “BIC” = BIC(housing_model),
+                         “R Squared” = r2(housing_model),
+                         “Adj R Squared” = adj_r2(housing_model))
+kable(model_stats, align = c(“c”, “r”))
+model_list = list(‘housing_model’)
